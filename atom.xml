@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.orctom.com/"/>
-  <updated>2017-11-13T03:47:09.785Z</updated>
+  <updated>2017-11-15T06:28:21.277Z</updated>
   <id>http://www.orctom.com/</id>
   
   <author>
@@ -20,10 +20,17 @@
     <link href="http://www.orctom.com/2017/11/12/introduction-to-speech-recognition/"/>
     <id>http://www.orctom.com/2017/11/12/introduction-to-speech-recognition/</id>
     <published>2017-11-12T13:35:25.464Z</published>
-    <updated>2017-11-13T03:47:09.785Z</updated>
+    <updated>2017-11-15T06:28:21.277Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><h3 id="Pre-processing"><a href="#Pre-processing" class="headerlink" title="Pre-processing"></a>Pre-processing</h3><ul>
-<li>Window: process the data window by window, as human voices have a duration of consistency within the range of 20ms to 50ms, generally we take 25ms. And make the step size of 10ms.</li>
+    <content type="html"><![CDATA[<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p><img src="http://www.authot.com/wp-content/uploads/2016/09/article4-automatic-speech-recognition-system-asr-architecture-authot.png" alt="Overview"></p>
+<h2 id="Decoding"><a href="#Decoding" class="headerlink" title="Decoding"></a>Decoding</h2><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">┌─────────┐                           </div><div class="line">│  wave   │                           </div><div class="line">│         │                           </div><div class="line">└─────────┘                           </div><div class="line">     │                                </div><div class="line">     │   MFCC / PLP / XX_PLP ...      </div><div class="line">     ▼                                </div><div class="line">┌─────────┐                           </div><div class="line">│ Feature │                           </div><div class="line">│ <span class="keyword">Vectors</span> │                           </div><div class="line">└─────────┘                           </div><div class="line">     │                                </div><div class="line">     │   Acoustic Model (GMM / DNN)   </div><div class="line">     ▼                                </div><div class="line">┌─────────┐                           </div><div class="line">│ Phoneme │                           </div><div class="line">│  State  │                           </div><div class="line">└─────────┘                           </div><div class="line">     │                                </div><div class="line">     │   Acoustic Model (HMM)         </div><div class="line">     ▼                                </div><div class="line">┌─────────┐                           </div><div class="line">│ Phoneme │                           </div><div class="line">│         │                           </div><div class="line">└─────────┘                           </div><div class="line">     │                                </div><div class="line">     │   Lexicon                      </div><div class="line">     ▼                                </div><div class="line">┌─────────┐                           </div><div class="line">│  <span class="keyword">Word</span>   │                           </div><div class="line">│         │                           </div><div class="line">└─────────┘                           </div><div class="line">     │                                </div><div class="line">     │   <span class="keyword">Language</span> Model               </div><div class="line">     ▼                                </div><div class="line">┌─────────┐                           </div><div class="line">│  <span class="keyword">Text</span>   │                           </div><div class="line">│         │                           </div><div class="line">└─────────┘</div></pre></td></tr></table></figure>
+<h3 id="Speech-Capture"><a href="#Speech-Capture" class="headerlink" title="Speech Capture"></a>Speech Capture</h3><ul>
+<li>Wave</li>
+<li>Mono</li>
+<li>VAD (noise)</li>
+</ul>
+<h3 id="Pre-processing"><a href="#Pre-processing" class="headerlink" title="Pre-processing"></a>Pre-processing</h3><ul>
+<li>Short-time analysis: process the data window by window, as human voices have a duration of consistency within the range of 20ms to 50ms, generally we take 25ms. And make the step size of 10ms.</li>
 <li>FFT: converting raw wave data to frequency data.</li>
 <li>Cut: keep only a range of frequency data, that most human voices cover.</li>
 <li>Other… (DCT)</li>
@@ -33,41 +40,72 @@
 </ul>
 </li>
 </ul>
+<p>Production-based Analysis</p>
+<ul>
+<li>Spectral Envelope</li>
+<li>Cepstral Analysis</li>
+<li>Linear Predictive Analysis</li>
+</ul>
+<p>Perception-based Analysis</p>
+<ul>
+<li>Mel-Frequency Cepstrum Coefficients</li>
+<li>Perceptual Linear Prediction</li>
+</ul>
 <h3 id="Acoustic-Model"><a href="#Acoustic-Model" class="headerlink" title="Acoustic Model"></a>Acoustic Model</h3><ul>
 <li>Acoustic model is a classification model, who’s input is the fetures, MFCC/PLP…, while output is the <code>phoneme</code>s, about 70 most frequently used.</li>
 <li>Unsupervised learning</li>
 <li>GMM + HMM / HMM + LSTM</li>
 <li>Baum-Welch(EM) / MLE</li>
 </ul>
-<h4 id="GMM-HMM"><a href="#GMM-HMM" class="headerlink" title="GMM + HMM"></a>GMM + HMM</h4><h4 id="tri-phoneme-model"><a href="#tri-phoneme-model" class="headerlink" title="tri-phoneme model"></a>tri-phoneme model</h4><p>Each phoneme in different context, may pronounce differently.<br>So setup a </p>
-<h3 id="Lexicon-Model"><a href="#Lexicon-Model" class="headerlink" title="Lexicon Model"></a>Lexicon Model</h3><h3 id="Language-Model"><a href="#Language-Model" class="headerlink" title="Language Model"></a>Language Model</h3><p>Making the sequence of words more like a human speech</p>
+<h4 id="GMM-HMM"><a href="#GMM-HMM" class="headerlink" title="GMM + HMM"></a>GMM + HMM</h4><p>HMM: modeling the states of phonemes.<br>GMM: modeling the output probabilities.</p>
+<h4 id="tri-phoneme-model"><a href="#tri-phoneme-model" class="headerlink" title="tri-phoneme model"></a>tri-phoneme model</h4><p>Each phoneme in different context, may pronounce differently.<br>So setup a </p>
+<h3 id="Lexicon-Pronunciation-Model"><a href="#Lexicon-Pronunciation-Model" class="headerlink" title="Lexicon (Pronunciation Model)"></a>Lexicon (Pronunciation Model)</h3><p>words -&gt; pronunciation in terms of phones</p>
+<h3 id="Language-Model"><a href="#Language-Model" class="headerlink" title="Language Model"></a>Language Model</h3><p>For modeling the structure of sentences.<br>Making the sequence of words more like a human speech.</p>
 <ul>
-<li>n-gram</li>
-<li></li>
+<li>N-gram</li>
+<li>WFST(Weighted Finite State Transducer)</li>
 </ul>
+<h3 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder"></a>Decoder</h3><p>Viterbi    algorithm: dynamic programming for combining all these to get word sequence from speech</p>
 <h2 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h2><ul>
-<li>Labels marked by human</li>
-<li>Language model</li>
-<li>Laxicon model<br>Represented by a HMM model</li>
+<li>Labels marked (hand-crafted)</li>
+<li>Acoustic model (EM)<br>Gaussians    for    computing P(X|Q)</li>
+<li>Laxicon (hand-crafted)<br>HMM: what phones can follow each other</li>
+<li>Language model (n-gram, RNN)</li>
 </ul>
-<h2 id="Decoding"><a href="#Decoding" class="headerlink" title="Decoding"></a>Decoding</h2><h2 id="Models"><a href="#Models" class="headerlink" title="Models"></a>Models</h2><h3 id="GMM"><a href="#GMM" class="headerlink" title="GMM"></a>GMM</h3><h3 id="HMM"><a href="#HMM" class="headerlink" title="HMM"></a>HMM</h3><ul>
-<li>Transition posibilities</li>
-<li>Observation states</li>
-<li>Hidden stats</li>
+<h2 id="Models"><a href="#Models" class="headerlink" title="Models"></a>Models</h2><h3 id="GMM"><a href="#GMM" class="headerlink" title="GMM"></a>GMM</h3><h3 id="HMM"><a href="#HMM" class="headerlink" title="HMM"></a>HMM</h3><p>$$ \lambda = (\pi, A, B) $$</p>
+<ul>
+<li>Pi: initial state probabilities matrix</li>
+<li>A: hidden states transition probabilities matrix</li>
+<li>B: output probabilities matrix (Confusion Matrix)</li>
+<li>S: Hidden States</li>
+<li>O: Observations</li>
 </ul>
 <p>Problem &amp; Solution</p>
 <ul>
-<li>概率计算问题即模型评价问题——前向算法和后向算法</li>
-<li>学习问题即参数估计问题——Baum-Welch算法</li>
-<li>预测问题即解码问题——Viterbi算法</li>
+<li>Evaluation: given the observations and lamdas, find the pobability of the observation sequence - <code>Forword algrithm</code></li>
+<li>Decoding: given the observations and lamda, find out hidden stats - <code>Viterbi algorithm</code></li>
+<li>Learning: given the observations and learn the lamda - <code>Baum-Welch</code> (forward-backward algorithm)</li>
 </ul>
-<h3 id="Viterbi"><a href="#Viterbi" class="headerlink" title="Viterbi"></a>Viterbi</h3><p>[Viterbi animated demo]{<a href="https://upload.wikimedia.org/wikipedia/commons/7/73/Viterbi_animated_demo.gif}" target="_blank" rel="external">https://upload.wikimedia.org/wikipedia/commons/7/73/Viterbi_animated_demo.gif}</a></p>
-<h2 id="Summerize"><a href="#Summerize" class="headerlink" title="Summerize"></a>Summerize</h2><h3 id="Fumular"><a href="#Fumular" class="headerlink" title="Fumular"></a>Fumular</h3><p>$$ W* = argmaxP(W|X) $$</p>
+<h4 id="Viterbi"><a href="#Viterbi" class="headerlink" title="Viterbi"></a>Viterbi</h4><p>Forced alignment.<br><img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Viterbi_animated_demo.gif" alt="Viterbi animated demo"></p>
+<h2 id="Summerize"><a href="#Summerize" class="headerlink" title="Summerize"></a>Summerize</h2><h3 id="Fumular"><a href="#Fumular" class="headerlink" title="Fumular"></a>Fumular</h3><ul>
+<li>X: acoustic feature vectors (observations)</li>
+<li>W: a word sequence</li>
+<li>Q: model parameters</li>
+</ul>
+<p>Find the most probable word sequence Wˆ = w1,w2, . . . ,wM<br>given the acoustic observations X = x1, x2, . . . , xn:<br>$$ W^* = argmax_{w}P(W|X) $$</p>
+<p>Applying Bayes’ Theorem:<br>$$ W^* = argmax_{w}\frac{P(X|W)P(W)}{P(X)} $$</p>
+<p>P(X) is irrelevant:<br>$$ W^* = argmax_{w}P(X|W)P(W) $$</p>
+<p>Words are composed of state sequences so we may express<br>this criterion by summing over all state sequences<br>Q = q1, q2, . . . , qn:<br>$$ W^* = argmax_{w}P(W)\sum_Q{P(Q|W)P(X|Q)} $$</p>
+<h2 id="Other-Approaches"><a href="#Other-Approaches" class="headerlink" title="Other Approaches"></a>Other Approaches</h2><ul>
+<li>HMM + GMM -&gt; HMM + DNN + GMM(frame alignment only)</li>
+<li>HMM + DNN -&gt; RNN</li>
+<li>end 2 end: RNN + CTC (Connectionist Temporal Classification)</li>
+</ul>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;Overview&quot;&gt;&lt;a href=&quot;#Overview&quot; class=&quot;headerlink&quot; title=&quot;Overview&quot;&gt;&lt;/a&gt;Overview&lt;/h2&gt;&lt;h3 id=&quot;Pre-processing&quot;&gt;&lt;a href=&quot;#Pre-processing&quot;
+      &lt;h1 id=&quot;Overview&quot;&gt;&lt;a href=&quot;#Overview&quot; class=&quot;headerlink&quot; title=&quot;Overview&quot;&gt;&lt;/a&gt;Overview&lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;http://www.authot.com/wp-content/upl
     
     </summary>
     
@@ -79,112 +117,57 @@
   </entry>
   
   <entry>
-    <title>AMQP</title>
-    <link href="http://www.orctom.com/2017/05/24/amqp/"/>
-    <id>http://www.orctom.com/2017/05/24/amqp/</id>
+    <title>Json Web Token</title>
+    <link href="http://www.orctom.com/2017/05/24/jwt/"/>
+    <id>http://www.orctom.com/2017/05/24/jwt/</id>
     <published>2017-05-24T14:13:14.000Z</published>
     <updated>2017-05-24T14:13:14.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="Technical-Terminology"><a href="#Technical-Terminology" class="headerlink" title="Technical Terminology"></a>Technical Terminology</h3><ul>
-<li><strong>Connection</strong>: A network connection, e.g. a TCP/IP socket connection</li>
-<li><strong>Channel</strong>: A bi-directional stream of communications between two AMQP peers. Channels are multiplexed so that a single network connection can carry multiple channels</li>
-<li><strong>Client</strong>: The initiator of an AMQP connection or channel. AMQP is not symmetrical. Clients produce and consume messages while servers queue and route messages</li>
-<li><strong>Server</strong>: The process that accepts client connections and implements the AMQP message queueing and routing functions. Also known as “broker”</li>
-<li><strong>Peer</strong>: Either party in an AMQP connection. An AMQP connection involves exactly two peers (one is the client, one is the server)</li>
-<li><strong>Frame</strong>: A formally-defined package of connection data. Contiguously - as a single unit - on the connection</li>
-<li><strong>Protocol Class</strong>: A collection of AMQP commands (also known as Methods) that deal with a specific type of functionality</li>
-<li><strong>Method</strong>: A specific type of AMQP command frame that passes instructions from one peer to the other</li>
-<li><strong>Content</strong>: Application data passed from client to server and from server to client. AMQP content can be structured into multiple parts. The term is synonymous with “message”</li>
-<li><strong>Content Header</strong>: A specific type of frame that describes a content’s properties</li>
-<li><strong>Content Body</strong>: A specific type of frame that contains raw application data. Content body frames are entirely opaque - the server does not examine or modify these in any way</li>
-<li><strong>Message</strong>: Synonymous with “content”</li>
-<li><strong>Exchange</strong>: The entity within the server which receives messages from producer applications and optionally routes these to message queues within the server</li>
-<li><strong>Exchange Type</strong>: The algorithm and implementation of a particular model of exchange. In contrast to the “exchange instance”, which is the entity that receives and routes messages within the server</li>
-<li><strong>Message queue</strong>: A named entity that holds messages and forwards them to consumer applications.</li>
-<li><strong>Binding</strong>: An entity that creates a relationship between a message queue and an exchange</li>
-<li><strong>Routing key</strong>: A virtual address that an exchange may use to decide how to route a specific message</li>
-<li><strong>Durable</strong>: A server resource that survives a server restart</li>
-<li><strong>Transient</strong>: A server resource that is wiped or reset after a server restart</li>
-<li><strong>Persistent</strong>: A message that the server holds on reliable disk storage and MUST NOT lose after a server restart</li>
-<li><strong>Non-persistent</strong>: A message that the server holds in memory and MAY lose after a server restart</li>
-<li><strong>Consumer</strong>: A client application that requests messages from a message queue</li>
-<li><strong>Producer</strong>: A client application that publishes messages to an exchange</li>
-<li><strong>Virtual host</strong>: A collection of exchanges, message queues and associated objects. Virtual hosts are independent server domains that share a common authentication and encryption environment. The client application chooses a virtual host after logging in to the server</li>
-<li><strong>Realm</strong>: A set of server resources (exchanges and message queues) covered by a single security policy and access control. Applications ask for access rights for specific realms, rather than for specific resources</li>
-<li><strong>Ticket</strong>: A token that a server provides to a client, for access to a specific realm</li>
-<li><strong>Streaming</strong>: The process by which the server will send messages to the client at a pre-arranged rate</li>
-<li><strong>Staging</strong>: The process by which a peer will transfer a large message to a temporary holding area before formally handing it over to the recipient. This is how AMQP implements re-startable file transfers</li>
-<li><strong>Out-of-band transport</strong>: The technique by which data is carried outside the network connection. For example, one might send data across TCP/IP and then switch to using shared memory if one is talking to a peer on the same system</li>
-<li><strong>Zero copy</strong>: The technique of transferring data without copying it to or from intermediate buffers. Zero copy requires that the protocol allows the out-of-band transfer of data as opaque blocks, as AMQP does</li>
-<li><strong>Assertion</strong>: A condition that must be true for processing to continue</li>
-<li><strong>Exception</strong>: A failed assertion, handled by closing either the Channel or the Connection</li>
-<li><strong>Topic:</strong> Usually a means of distributing messages; AMQP implements topics using one or more types of exchange</li>
-<li><strong>Subscription</strong>: Usually a request to receive data from topics; AMQP implements subscriptions as message queues and bindings</li>
-<li><strong>Service</strong>: Usually synonymous with server. The AMQP standard uses “server” to conform with IETF standard nomenclature and to clarify the roles of each party in the protocol (both sides may be AMQP services)</li>
-<li><strong>Broker</strong>: synonymous with server. The AMQP standard uses the terms “client” and “server” to conform with IETF standard nomenclature.</li>
-<li><strong>Router</strong>: Sometimes used to describe the actions of an exchange. However exchanges can do more than message routing (they can also act as message end-points), and the term “router” has special significance in the network domain, so AMQP avoids using it.</li>
+    <content type="html"><![CDATA[<h3 id="What-is-Json-Web-Token"><a href="#What-is-Json-Web-Token" class="headerlink" title="What is Json Web Token"></a>What is Json Web Token</h3><p>A compact, URL-safe means of representing claims to be transferred between two parties.<br>The server side creates a signature with a preconfigured secret key, and send the signature with the content to client.<br>When the client visit the server again with the token, the server can verify the token to trust the content in the token, without looking up databases.<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">hash</span><span class="params">(user_info + secret_key)</span></span></div></pre></td></tr></table></figure></p>
+<h3 id="Format"><a href="#Format" class="headerlink" title="Format"></a>Format</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span>.<span class="tag">&lt;<span class="name">payload</span>&gt;</span>.<span class="tag">&lt;<span class="name">signature</span>&gt;</span></div></pre></td></tr></table></figure>
+<h4 id="header"><a href="#header" class="headerlink" title="header"></a>header</h4><p>Base64Url encoded of json such as:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"alg"</span>: <span class="string">"HS256"</span>,</div><div class="line">  <span class="attr">"typ"</span>: <span class="string">"JWT"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Standard fields:</p>
+<ul>
+<li>Token type (typ)</li>
+<li>Content type (cty): This claim should always be <code>JWT</code></li>
+<li>Algorithm (alg): <code>HS256</code></li>
 </ul>
-<h3 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h3><h4 id="AMQP-Model"><a href="#AMQP-Model" class="headerlink" title="AMQP Model"></a>AMQP Model</h4><h5 id="Channels"><a href="#Channels" class="headerlink" title="Channels"></a>Channels</h5><p>Channels are something like sessions.</p>
-<h5 id="Exchange"><a href="#Exchange" class="headerlink" title="Exchange"></a>Exchange</h5><p>Where messages been put by producers.<br>Receives mesages from publishers and routes them to “message queue”, based on arbitrary criteria, usually message properties or content.</p>
-<hr>
-<p><strong>Exchange Types</strong></p>
-<h6 id="Direct"><a href="#Direct" class="headerlink" title="Direct"></a>Direct</h6><p>Only one bound queue will see a given message. (Pool of workers)</p>
-<h6 id="Fanout"><a href="#Fanout" class="headerlink" title="Fanout"></a>Fanout</h6><p>Every bound queues will see the same messages. (Pub/Sub)</p>
-<h6 id="Topic"><a href="#Topic" class="headerlink" title="Topic"></a>Topic</h6><p>Fanout + routing keys support (filtering)</p>
-<hr>
-<h5 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a>Message Queue</h5><p>Where messages been read by receviers.<br>Stores messages until they can be safely processed by consumer(s).</p>
-<h5 id="Binding"><a href="#Binding" class="headerlink" title="Binding"></a>Binding</h5><p>How the messages been routed from Exchanges to Queues.<br>Defines the relationship between a message queue and an exchange, and provides the message routing criteeria.</p>
-<h3 id="NPM-libs"><a href="#NPM-libs" class="headerlink" title="NPM libs"></a>NPM libs</h3><table>
-<thead>
-<tr>
-<th style="text-align:center">Lib</th>
-<th style="text-align:center">Exchanges, Queues</th>
-<th style="text-align:center">Channels</th>
-<th style="text-align:center">Bindings</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">node-amqp</td>
-<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
-<td style="text-align:center"><i class="glyphicon glyphicon-remove"></i></td>
-<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
-</tr>
-<tr>
-<td style="text-align:center">amqplib</td>
-<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
-<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
-<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
-</tr>
-<tr>
-<td style="text-align:center">rabbit.js</td>
-<td style="text-align:center"><i class="glyphicon glyphicon-remove"></i></td>
-<td style="text-align:center"><i class="glyphicon glyphicon-remove"></i></td>
-<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
-</tr>
-</tbody>
-</table>
-<h3 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a>Logstash</h3><h4 id="Output-logstash-gt-mq"><a href="#Output-logstash-gt-mq" class="headerlink" title="Output (logstash -&gt; mq)"></a>Output (logstash -&gt; mq)</h4><blockquote>
-<p>exchange: “was”<br>exchange_type: “fanout” # one of [“fanout”, “direct”, “topic”]<br>key: “logstash”</p>
-</blockquote>
-<h4 id="Input-mq-gt-logstash"><a href="#Input-mq-gt-logstash" class="headerlink" title="Input (mq -&gt; logstash)"></a>Input (mq -&gt; logstash)</h4><blockquote>
-<p>arguments: {}<br>auto_delete: false<br>exchange: “was”<br>exclusive: false<br>key: “logstash”<br>passive: false<br>queue: “”</p>
-</blockquote>
-<h3 id="Some-links"><a href="#Some-links" class="headerlink" title="Some links"></a>Some links</h3><ul>
-<li><a href="https://www.amqp.org/" target="_blank" rel="external">https://www.amqp.org/</a></li>
+<h4 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h4><p>A.K.A claims, which are the statements of the users, and additional metadata.<br>Base64Url encoded of json such as:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"sub"</span>: <span class="string">"1234567890"</span>,</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"John Doe"</span>,</div><div class="line">  <span class="attr">"admin"</span>: <span class="literal">true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Standard fields:</p>
+<ul>
+<li>Issuer (iss): The principal that issued the token</li>
+<li>Subject (sub): The subject of the token</li>
+<li>Audience (aud):  The claim or user that the token is issued for</li>
+<li>Expiration time (exp): Expiration time</li>
+<li>Not before (nbf): Similarly, the not-before time claim identifies the time on which the JWT will start to be accepted for processing.</li>
+<li>Issued at (iat) - The “iat” (issued at) claim identifies the time at which the JWT was issued</li>
+<li>JWT ID (jti) - case sensitive unique identifier of the token even among different issuers</li>
+</ul>
+<h4 id="signature"><a href="#signature" class="headerlink" title="signature"></a>signature</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">HMACSHA256(<span class="tag">&lt;<span class="name">header</span>&gt;</span>.<span class="tag">&lt;<span class="name">payload</span>&gt;</span>, <span class="tag">&lt;<span class="name">your_secure</span>&gt;</span>)</div></pre></td></tr></table></figure>
+<h4 id="Putting-all-together"><a href="#Putting-all-together" class="headerlink" title="Putting all together"></a>Putting all together</h4><figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">|<span class="type">&lt;---- header</span> -----&gt;|       <span class="type">|&lt;----- payload</span> -----&gt;|       <span class="type">|&lt;----------------------- signature</span> --------------------------&gt;|</div><div class="line"><span class="type">base64Encode</span>(header) + <span class="string">"."</span> + base64Encode(payload) + <span class="string">"."</span> + HMACSHA256(base64Encode(header + <span class="string">"."</span> + payload), &lt;your_secure&gt;)</div></pre></td></tr></table></figure>
+<h3 id="How-it-works"><a href="#How-it-works" class="headerlink" title="How it works"></a>How it works</h3><ul>
+<li>Server generates a <code>secret</code> (prepare before startup) and make it secure, and avaialbe only to server.</li>
+<li>Client requests for a token. (by using credential to identify the client is a valid client)</li>
+<li>Server generates a <code>token</code> with a <code>secret</code>.</li>
+<li>Server returns the <code>token</code>.</li>
+<li>Client stores the <code>token</code> to local storage.</li>
+<li>Client visits protected resources on server with the <code>token</code>.<ul>
+<li>Typically in the <em>Authorization</em> header</li>
+<li><code>Authorization: Bearer &lt;token&gt;</code></li>
+</ul>
+</li>
+<li>Server verifies the <code>token</code>‘s signature by creating a signature and comparing if the two are equal, then retrives client informations, without looking up databases.</li>
 </ul>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;Technical-Terminology&quot;&gt;&lt;a href=&quot;#Technical-Terminology&quot; class=&quot;headerlink&quot; title=&quot;Technical Terminology&quot;&gt;&lt;/a&gt;Technical Terminology&lt;/
+      &lt;h3 id=&quot;What-is-Json-Web-Token&quot;&gt;&lt;a href=&quot;#What-is-Json-Web-Token&quot; class=&quot;headerlink&quot; title=&quot;What is Json Web Token&quot;&gt;&lt;/a&gt;What is Json Web Tok
     
     </summary>
     
     
-      <category term="mq" scheme="http://www.orctom.com/tags/mq/"/>
-    
-      <category term="amqp" scheme="http://www.orctom.com/tags/amqp/"/>
+      <category term="security" scheme="http://www.orctom.com/tags/security/"/>
     
   </entry>
   
@@ -297,57 +280,112 @@
   </entry>
   
   <entry>
-    <title>Json Web Token</title>
-    <link href="http://www.orctom.com/2017/05/24/jwt/"/>
-    <id>http://www.orctom.com/2017/05/24/jwt/</id>
+    <title>AMQP</title>
+    <link href="http://www.orctom.com/2017/05/24/amqp/"/>
+    <id>http://www.orctom.com/2017/05/24/amqp/</id>
     <published>2017-05-24T14:13:14.000Z</published>
     <updated>2017-05-24T14:13:14.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="What-is-Json-Web-Token"><a href="#What-is-Json-Web-Token" class="headerlink" title="What is Json Web Token"></a>What is Json Web Token</h3><p>A compact, URL-safe means of representing claims to be transferred between two parties.<br>The server side creates a signature with a preconfigured secret key, and send the signature with the content to client.<br>When the client visit the server again with the token, the server can verify the token to trust the content in the token, without looking up databases.<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">hash</span><span class="params">(user_info + secret_key)</span></span></div></pre></td></tr></table></figure></p>
-<h3 id="Format"><a href="#Format" class="headerlink" title="Format"></a>Format</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span>.<span class="tag">&lt;<span class="name">payload</span>&gt;</span>.<span class="tag">&lt;<span class="name">signature</span>&gt;</span></div></pre></td></tr></table></figure>
-<h4 id="header"><a href="#header" class="headerlink" title="header"></a>header</h4><p>Base64Url encoded of json such as:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"alg"</span>: <span class="string">"HS256"</span>,</div><div class="line">  <span class="attr">"typ"</span>: <span class="string">"JWT"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Standard fields:</p>
-<ul>
-<li>Token type (typ)</li>
-<li>Content type (cty): This claim should always be <code>JWT</code></li>
-<li>Algorithm (alg): <code>HS256</code></li>
+    <content type="html"><![CDATA[<h3 id="Technical-Terminology"><a href="#Technical-Terminology" class="headerlink" title="Technical Terminology"></a>Technical Terminology</h3><ul>
+<li><strong>Connection</strong>: A network connection, e.g. a TCP/IP socket connection</li>
+<li><strong>Channel</strong>: A bi-directional stream of communications between two AMQP peers. Channels are multiplexed so that a single network connection can carry multiple channels</li>
+<li><strong>Client</strong>: The initiator of an AMQP connection or channel. AMQP is not symmetrical. Clients produce and consume messages while servers queue and route messages</li>
+<li><strong>Server</strong>: The process that accepts client connections and implements the AMQP message queueing and routing functions. Also known as “broker”</li>
+<li><strong>Peer</strong>: Either party in an AMQP connection. An AMQP connection involves exactly two peers (one is the client, one is the server)</li>
+<li><strong>Frame</strong>: A formally-defined package of connection data. Contiguously - as a single unit - on the connection</li>
+<li><strong>Protocol Class</strong>: A collection of AMQP commands (also known as Methods) that deal with a specific type of functionality</li>
+<li><strong>Method</strong>: A specific type of AMQP command frame that passes instructions from one peer to the other</li>
+<li><strong>Content</strong>: Application data passed from client to server and from server to client. AMQP content can be structured into multiple parts. The term is synonymous with “message”</li>
+<li><strong>Content Header</strong>: A specific type of frame that describes a content’s properties</li>
+<li><strong>Content Body</strong>: A specific type of frame that contains raw application data. Content body frames are entirely opaque - the server does not examine or modify these in any way</li>
+<li><strong>Message</strong>: Synonymous with “content”</li>
+<li><strong>Exchange</strong>: The entity within the server which receives messages from producer applications and optionally routes these to message queues within the server</li>
+<li><strong>Exchange Type</strong>: The algorithm and implementation of a particular model of exchange. In contrast to the “exchange instance”, which is the entity that receives and routes messages within the server</li>
+<li><strong>Message queue</strong>: A named entity that holds messages and forwards them to consumer applications.</li>
+<li><strong>Binding</strong>: An entity that creates a relationship between a message queue and an exchange</li>
+<li><strong>Routing key</strong>: A virtual address that an exchange may use to decide how to route a specific message</li>
+<li><strong>Durable</strong>: A server resource that survives a server restart</li>
+<li><strong>Transient</strong>: A server resource that is wiped or reset after a server restart</li>
+<li><strong>Persistent</strong>: A message that the server holds on reliable disk storage and MUST NOT lose after a server restart</li>
+<li><strong>Non-persistent</strong>: A message that the server holds in memory and MAY lose after a server restart</li>
+<li><strong>Consumer</strong>: A client application that requests messages from a message queue</li>
+<li><strong>Producer</strong>: A client application that publishes messages to an exchange</li>
+<li><strong>Virtual host</strong>: A collection of exchanges, message queues and associated objects. Virtual hosts are independent server domains that share a common authentication and encryption environment. The client application chooses a virtual host after logging in to the server</li>
+<li><strong>Realm</strong>: A set of server resources (exchanges and message queues) covered by a single security policy and access control. Applications ask for access rights for specific realms, rather than for specific resources</li>
+<li><strong>Ticket</strong>: A token that a server provides to a client, for access to a specific realm</li>
+<li><strong>Streaming</strong>: The process by which the server will send messages to the client at a pre-arranged rate</li>
+<li><strong>Staging</strong>: The process by which a peer will transfer a large message to a temporary holding area before formally handing it over to the recipient. This is how AMQP implements re-startable file transfers</li>
+<li><strong>Out-of-band transport</strong>: The technique by which data is carried outside the network connection. For example, one might send data across TCP/IP and then switch to using shared memory if one is talking to a peer on the same system</li>
+<li><strong>Zero copy</strong>: The technique of transferring data without copying it to or from intermediate buffers. Zero copy requires that the protocol allows the out-of-band transfer of data as opaque blocks, as AMQP does</li>
+<li><strong>Assertion</strong>: A condition that must be true for processing to continue</li>
+<li><strong>Exception</strong>: A failed assertion, handled by closing either the Channel or the Connection</li>
+<li><strong>Topic:</strong> Usually a means of distributing messages; AMQP implements topics using one or more types of exchange</li>
+<li><strong>Subscription</strong>: Usually a request to receive data from topics; AMQP implements subscriptions as message queues and bindings</li>
+<li><strong>Service</strong>: Usually synonymous with server. The AMQP standard uses “server” to conform with IETF standard nomenclature and to clarify the roles of each party in the protocol (both sides may be AMQP services)</li>
+<li><strong>Broker</strong>: synonymous with server. The AMQP standard uses the terms “client” and “server” to conform with IETF standard nomenclature.</li>
+<li><strong>Router</strong>: Sometimes used to describe the actions of an exchange. However exchanges can do more than message routing (they can also act as message end-points), and the term “router” has special significance in the network domain, so AMQP avoids using it.</li>
 </ul>
-<h4 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h4><p>A.K.A claims, which are the statements of the users, and additional metadata.<br>Base64Url encoded of json such as:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"sub"</span>: <span class="string">"1234567890"</span>,</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"John Doe"</span>,</div><div class="line">  <span class="attr">"admin"</span>: <span class="literal">true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Standard fields:</p>
-<ul>
-<li>Issuer (iss): The principal that issued the token</li>
-<li>Subject (sub): The subject of the token</li>
-<li>Audience (aud):  The claim or user that the token is issued for</li>
-<li>Expiration time (exp): Expiration time</li>
-<li>Not before (nbf): Similarly, the not-before time claim identifies the time on which the JWT will start to be accepted for processing.</li>
-<li>Issued at (iat) - The “iat” (issued at) claim identifies the time at which the JWT was issued</li>
-<li>JWT ID (jti) - case sensitive unique identifier of the token even among different issuers</li>
-</ul>
-<h4 id="signature"><a href="#signature" class="headerlink" title="signature"></a>signature</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">HMACSHA256(<span class="tag">&lt;<span class="name">header</span>&gt;</span>.<span class="tag">&lt;<span class="name">payload</span>&gt;</span>, <span class="tag">&lt;<span class="name">your_secure</span>&gt;</span>)</div></pre></td></tr></table></figure>
-<h4 id="Putting-all-together"><a href="#Putting-all-together" class="headerlink" title="Putting all together"></a>Putting all together</h4><figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">|<span class="type">&lt;---- header</span> -----&gt;|       <span class="type">|&lt;----- payload</span> -----&gt;|       <span class="type">|&lt;----------------------- signature</span> --------------------------&gt;|</div><div class="line"><span class="type">base64Encode</span>(header) + <span class="string">"."</span> + base64Encode(payload) + <span class="string">"."</span> + HMACSHA256(base64Encode(header + <span class="string">"."</span> + payload), &lt;your_secure&gt;)</div></pre></td></tr></table></figure>
-<h3 id="How-it-works"><a href="#How-it-works" class="headerlink" title="How it works"></a>How it works</h3><ul>
-<li>Server generates a <code>secret</code> (prepare before startup) and make it secure, and avaialbe only to server.</li>
-<li>Client requests for a token. (by using credential to identify the client is a valid client)</li>
-<li>Server generates a <code>token</code> with a <code>secret</code>.</li>
-<li>Server returns the <code>token</code>.</li>
-<li>Client stores the <code>token</code> to local storage.</li>
-<li>Client visits protected resources on server with the <code>token</code>.<ul>
-<li>Typically in the <em>Authorization</em> header</li>
-<li><code>Authorization: Bearer &lt;token&gt;</code></li>
-</ul>
-</li>
-<li>Server verifies the <code>token</code>‘s signature by creating a signature and comparing if the two are equal, then retrives client informations, without looking up databases.</li>
+<h3 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h3><h4 id="AMQP-Model"><a href="#AMQP-Model" class="headerlink" title="AMQP Model"></a>AMQP Model</h4><h5 id="Channels"><a href="#Channels" class="headerlink" title="Channels"></a>Channels</h5><p>Channels are something like sessions.</p>
+<h5 id="Exchange"><a href="#Exchange" class="headerlink" title="Exchange"></a>Exchange</h5><p>Where messages been put by producers.<br>Receives mesages from publishers and routes them to “message queue”, based on arbitrary criteria, usually message properties or content.</p>
+<hr>
+<p><strong>Exchange Types</strong></p>
+<h6 id="Direct"><a href="#Direct" class="headerlink" title="Direct"></a>Direct</h6><p>Only one bound queue will see a given message. (Pool of workers)</p>
+<h6 id="Fanout"><a href="#Fanout" class="headerlink" title="Fanout"></a>Fanout</h6><p>Every bound queues will see the same messages. (Pub/Sub)</p>
+<h6 id="Topic"><a href="#Topic" class="headerlink" title="Topic"></a>Topic</h6><p>Fanout + routing keys support (filtering)</p>
+<hr>
+<h5 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a>Message Queue</h5><p>Where messages been read by receviers.<br>Stores messages until they can be safely processed by consumer(s).</p>
+<h5 id="Binding"><a href="#Binding" class="headerlink" title="Binding"></a>Binding</h5><p>How the messages been routed from Exchanges to Queues.<br>Defines the relationship between a message queue and an exchange, and provides the message routing criteeria.</p>
+<h3 id="NPM-libs"><a href="#NPM-libs" class="headerlink" title="NPM libs"></a>NPM libs</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">Lib</th>
+<th style="text-align:center">Exchanges, Queues</th>
+<th style="text-align:center">Channels</th>
+<th style="text-align:center">Bindings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">node-amqp</td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-remove"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+</tr>
+<tr>
+<td style="text-align:center">amqplib</td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+</tr>
+<tr>
+<td style="text-align:center">rabbit.js</td>
+<td style="text-align:center"><i class="glyphicon glyphicon-remove"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-remove"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a>Logstash</h3><h4 id="Output-logstash-gt-mq"><a href="#Output-logstash-gt-mq" class="headerlink" title="Output (logstash -&gt; mq)"></a>Output (logstash -&gt; mq)</h4><blockquote>
+<p>exchange: “was”<br>exchange_type: “fanout” # one of [“fanout”, “direct”, “topic”]<br>key: “logstash”</p>
+</blockquote>
+<h4 id="Input-mq-gt-logstash"><a href="#Input-mq-gt-logstash" class="headerlink" title="Input (mq -&gt; logstash)"></a>Input (mq -&gt; logstash)</h4><blockquote>
+<p>arguments: {}<br>auto_delete: false<br>exchange: “was”<br>exclusive: false<br>key: “logstash”<br>passive: false<br>queue: “”</p>
+</blockquote>
+<h3 id="Some-links"><a href="#Some-links" class="headerlink" title="Some links"></a>Some links</h3><ul>
+<li><a href="https://www.amqp.org/" target="_blank" rel="external">https://www.amqp.org/</a></li>
 </ul>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;What-is-Json-Web-Token&quot;&gt;&lt;a href=&quot;#What-is-Json-Web-Token&quot; class=&quot;headerlink&quot; title=&quot;What is Json Web Token&quot;&gt;&lt;/a&gt;What is Json Web Tok
+      &lt;h3 id=&quot;Technical-Terminology&quot;&gt;&lt;a href=&quot;#Technical-Terminology&quot; class=&quot;headerlink&quot; title=&quot;Technical Terminology&quot;&gt;&lt;/a&gt;Technical Terminology&lt;/
     
     </summary>
     
     
-      <category term="security" scheme="http://www.orctom.com/tags/security/"/>
+      <category term="mq" scheme="http://www.orctom.com/tags/mq/"/>
+    
+      <category term="amqp" scheme="http://www.orctom.com/tags/amqp/"/>
     
   </entry>
   

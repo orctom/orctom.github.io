@@ -1,0 +1,138 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="What Is I/O SchedulerThe purpose of I/O Scheduler is to improve the I/O performance fo traditional hard disk drive.Like merging I/O requests to simila">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Linux I/O Scheduler | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/05/06/linux-scheduler/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>Linux I/O Scheduler</h1>
+        
+        <div class="time-info">
+<time datetime="2017-05-06T15:58:03.000Z" itemprop="datePublished">May 06, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#What-Is-I-O-Scheduler"><span class="toc-number">1.</span> <span class="toc-text">What Is I/O Scheduler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Types"><span class="toc-number">2.</span> <span class="toc-text">Types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Commands"><span class="toc-number">3.</span> <span class="toc-text">Commands</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Identifying-Current-I-O-Scheduler"><span class="toc-number">3.1.</span> <span class="toc-text">Identifying Current I/O Scheduler</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Changing-IO-Scheduler-on-Runtime"><span class="toc-number">3.2.</span> <span class="toc-text">Changing IO Scheduler on Runtime</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Changing-the-Scheduler-on-Boot"><span class="toc-number">3.3.</span> <span class="toc-text">Changing the Scheduler on Boot</span></a></li></ol></li></ol>
+            </div>
+            
+            <h3 id="What-Is-I-O-Scheduler"><a href="#What-Is-I-O-Scheduler" class="headerlink" title="What Is I/O Scheduler"></a>What Is I/O Scheduler</h3><p>The purpose of I/O Scheduler is to improve the I/O performance fo traditional hard disk drive.<br>Like merging I/O requests to similar locations on disk, so that the drive doesn’t need to “seek” as often, improving the overall response time for disk operations.</p>
+<p>It tries to balance between these goals:</p>
+<ul>
+<li>fairness (let every process have its share of the access to disk)</li>
+<li>performance (try to serve requests close to current disk head position first, because seeking there is fastest)</li>
+<li>realtime (guarantee that a request is serviced in a given time)</li>
+</ul>
+<h3 id="Types"><a href="#Types" class="headerlink" title="Types"></a>Types</h3><ul>
+<li><strong>deadline</strong> scheduler<br>Two queues: a <em>read queue</em> and a <em>write queue</em>.<br>Each I/O request has a time stamp associated that is used by the kernel for an expiration time.<br>The default “deadline” values are 500 ms for <em>read</em> operations and 5,000 ms for <em>write</em> operations, which means <strong>good for read-heavy workload</strong>.<br>This is a cyclic elevator but with a twist: requests are given a deadline by which they get served. When a request starts to look like it’s going to expire, the kernel will skip intermediate sectors and move to that request, thus giving some realtime behaviour.</li>
+<li><strong>AS</strong> (Anticipatory Scheduler) scheduler<br>A cyclic elevator with waiting policy: after you service a request that looks like it might have future requests coming nearby, you pause even if there’s more sectors in your work queue. The anticipatory scheduler literally anticipates more requests to follow on this track or very close by. How AS decides whether to anticipate is basically just lot of guesswork based on typical access patterns.</li>
+<li><strong>cfq</strong> (Complete Fairness Queueing) scheduler<br>The default for most Linux distributions.<br>Providing a fair I/O priority to each process (round-robin), each process has it’s own queue.</li>
+<li><strong>noop</strong> scheduler<br>No special Operation, no algorithms, raw, just serve the requests in the FIFO queue one by one.<br><strong>Good for SSD</strong>.</li>
+</ul>
+<h3 id="Commands"><a href="#Commands" class="headerlink" title="Commands"></a>Commands</h3><h4 id="Identifying-Current-I-O-Scheduler"><a href="#Identifying-Current-I-O-Scheduler" class="headerlink" title="Identifying Current I/O Scheduler"></a>Identifying Current I/O Scheduler</h4><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat <span class="regexp">/sys/</span>block<span class="regexp">/sda/</span>queue<span class="regexp">/scheduler</span></div></pre></td></tr></table></figure>
+<h4 id="Changing-IO-Scheduler-on-Runtime"><a href="#Changing-IO-Scheduler-on-Runtime" class="headerlink" title="Changing IO Scheduler on Runtime"></a>Changing IO Scheduler on Runtime</h4><p>This change takes effect immediately, but is <em>NOT</em> permanent.<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo <span class="string">"noop"</span> &gt; <span class="regexp">/sys/</span>block<span class="regexp">/sda/</span>queue<span class="regexp">/scheduler</span></div></pre></td></tr></table></figure></p>
+<h4 id="Changing-the-Scheduler-on-Boot"><a href="#Changing-the-Scheduler-on-Boot" class="headerlink" title="Changing the Scheduler on Boot"></a>Changing the Scheduler on Boot</h4><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi <span class="regexp">/etc/</span><span class="keyword">default</span><span class="regexp">/grub</span></div></pre></td></tr></table></figure>
+<p>Add is the elevator parameter:<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">GRUB_CMDLINE_LINUX</span>=<span class="string">"elevator=noop"</span></div></pre></td></tr></table></figure></p>
+<p>Run <code>update-grub2</code> command to apply the changed configurations:<br><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">update</span>-grub2</div></pre></td></tr></table></figure></p>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/05/06/linux-scheduler/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

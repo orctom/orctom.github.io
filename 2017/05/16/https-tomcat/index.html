@@ -1,0 +1,185 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="Accepted format for keystore
+JKS
+PKCS11
+PKCS12 (an internet standard, can be manipulated thru openssl)
+
+JKS
+Import root certificate (certificate of th">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HTTPS Tomcat Configuration | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/05/16/https-tomcat/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>HTTPS Tomcat Configuration</h1>
+        
+        <div class="time-info">
+<time datetime="2017-05-16T15:33:29.000Z" itemprop="datePublished">May 16, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Accepted-format-for-keystore"><span class="toc-number">1.</span> <span class="toc-text">Accepted format for keystore</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JKS"><span class="toc-number">1.1.</span> <span class="toc-text">JKS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PKCS12"><span class="toc-number">1.2.</span> <span class="toc-text">PKCS12</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JSSE"><span class="toc-number">2.</span> <span class="toc-text">JSSE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#APR-recommended"><span class="toc-number">3.</span> <span class="toc-text">APR (recommended)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#web-xml"><span class="toc-number">4.</span> <span class="toc-text">web.xml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#APR-Installation"><span class="toc-number">5.</span> <span class="toc-text">APR Installation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Compile-APR"><span class="toc-number">5.1.</span> <span class="toc-text">Compile APR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configure-Tomcat-to-Use-APR"><span class="toc-number">5.2.</span> <span class="toc-text">Configure Tomcat to Use APR</span></a></li></ol></li></ol>
+            </div>
+            
+            <h2 id="Accepted-format-for-keystore"><a href="#Accepted-format-for-keystore" class="headerlink" title="Accepted format for keystore"></a>Accepted format for keystore</h2><ul>
+<li>JKS</li>
+<li>PKCS11</li>
+<li>PKCS12 (an internet standard, can be manipulated thru openssl)</li>
+</ul>
+<h3 id="JKS"><a href="#JKS" class="headerlink" title="JKS"></a>JKS</h3><ol>
+<li><p>Import root certificate (certificate of the CA where your certificate is signed)</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">keytool -import -trustcacerts \</div><div class="line">  -<span class="ruby"><span class="keyword">alias</span> root \</span></div><div class="line">  -<span class="ruby">file RootCertFileName.crt \</span></div><div class="line">  -<span class="ruby">keystore keystore</span></div></pre></td></tr></table></figure>
+<p>(<br>Or MAYBE copy the keystore from jre as the base<br><code>cp $JAVA_HOME/lib/security/cacerts keystore</code><br>or<br><code>cp /etc/ssl/certs/java/cacerts keystore</code><br>)</p>
+</li>
+<li><p>Import the certificate signed by a CA</p>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">keytool -import \</div><div class="line">  -<span class="ruby"><span class="keyword">alias</span> tomcat \</span></div><div class="line">  -<span class="ruby">keystore keystore \</span></div><div class="line">  -<span class="ruby">file &lt;your_certificate_filename&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="PKCS12"><a href="#PKCS12" class="headerlink" title="PKCS12"></a>PKCS12</h3><p>Prepare the certificate keystore<br>Importing an existing certificate into a PKCS12 keystore<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">openssl pkcs12 -export \</div><div class="line">  -<span class="ruby"><span class="keyword">in</span> domain.crt \</span></div><div class="line">  -<span class="ruby">inkey domain.key \</span></div><div class="line">  -<span class="ruby">out domain.p12 \</span></div><div class="line">  -<span class="ruby">name tomcat \</span></div><div class="line">  -<span class="ruby">CAfile ca.crt \</span></div><div class="line">  -<span class="ruby">caname root \</span></div><div class="line">  -<span class="ruby">chain</span></div></pre></td></tr></table></figure></p>
+<h2 id="JSSE"><a href="#JSSE" class="headerlink" title="JSSE"></a>JSSE</h2><p>JSSE implementation is provided as part of the Java runtime.<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- Define a SSL Coyote HTTP/1.1 Connector on port 8443 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">protocol</span>=<span class="string">"org.apache.coyote.http11.Http11NioProtocol"</span></span></div><div class="line">           <span class="attr">port</span>=<span class="string">"8443"</span> <span class="attr">maxThreads</span>=<span class="string">"200"</span></div><div class="line">           <span class="attr">scheme</span>=<span class="string">"https"</span> <span class="attr">secure</span>=<span class="string">"true"</span> <span class="attr">SSLEnabled</span>=<span class="string">"true"</span></div><div class="line">           <span class="attr">keystoreFile</span>=<span class="string">"path/to/domain.p12"</span> </div><div class="line">           <span class="attr">keystorePass</span>=<span class="string">"changeit"</span></div><div class="line">           <span class="attr">keyAlias</span>=<span class="string">"tomcat"</span></div><div class="line">           <span class="attr">clientAuth</span>=<span class="string">"false"</span> <span class="attr">sslProtocol</span>=<span class="string">"TLS"</span>/&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="APR-recommended"><a href="#APR-recommended" class="headerlink" title="APR (recommended)"></a>APR (recommended)</h2><p>APR (native) implementation uses the OpenSSL engine by default, more faster than JSSE approach.<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- Define a SSL Coyote HTTP/1.1 Connector on port 8443 --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8443"</span> <span class="attr">scheme</span>=<span class="string">"https"</span></span></div><div class="line">           <span class="attr">protocol</span>=<span class="string">"org.apache.coyote.http11.Http11AprProtocol"</span></div><div class="line">           <span class="attr">maxThreads</span>=<span class="string">"200"</span> <span class="attr">secure</span>=<span class="string">"true"</span> <span class="attr">SSLEnabled</span>=<span class="string">"true"</span></div><div class="line">           <span class="attr">SSLCertificateFile</span>=<span class="string">"ssl/preshop.crt"</span></div><div class="line">           <span class="attr">SSLCertificateKeyFile</span>=<span class="string">"ssl/private.key"</span></div><div class="line">           <span class="attr">SSLCertificateChainFile</span>=<span class="string">"ssl/intermediate.crt"</span></div><div class="line">           <span class="attr">SSLCACertificateFile</span>=<span class="string">"ssl/root.crt"</span></div><div class="line">           <span class="attr">SSLProtocol</span>=<span class="string">"TLSv1+TLSv1.1+TLSv1.2"</span>/&gt;</div></pre></td></tr></table></figure></p>
+<h2 id="web-xml"><a href="#web-xml" class="headerlink" title="web.xml"></a>web.xml</h2><p>If you want to ensure resources in your application is only be accessable thur https, you can configure the web.xml in your application:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">security-constraint</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">web-resource-collection</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">web-resource-name</span>&gt;</span>secured<span class="tag">&lt;/<span class="name">web-resource-name</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">web-resource-collection</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">user-data-constraint</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">transport-guarantee</span>&gt;</span>CONFIDENTIAL<span class="tag">&lt;/<span class="name">transport-guarantee</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">user-data-constraint</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">security-constraint</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="APR-Installation"><a href="#APR-Installation" class="headerlink" title="APR Installation"></a>APR Installation</h2><h3 id="Compile-APR"><a href="#Compile-APR" class="headerlink" title="Compile APR"></a>Compile APR</h3><pre>
+wget http://apache.fayea.com/apr/apr-1.5.2.tar.gz
+wget http://apache.fayea.com/apr/apr-iconv-1.2.1.tar.gz
+wget http://apache.fayea.com/apr/apr-util-1.5.4.tar.gz
+
+tar -xvf apr-1.5.2.tar.gz
+tar -xvf apr-iconv-1.2.1.tar.gz
+tar -xvf apr-util-1.5.4.tar.gz
+
+(
+  cd apr-1.5.2
+  ./configure --prefix=/usr/local/apr
+  make
+  sudo make install
+)
+
+(
+  cd apr-iconv-1.2.1
+  ./configure --prefix=/usr/local/apr-iconv --with-apr=/usr/local/apr
+  make
+  sudo make install
+)
+
+(
+  cd apr-util-1.5.4
+  ./configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr --with-apr-iconv=/usr/local/apr-iconv/  bin/apriconv
+  make
+  sudo make install
+)
+
+(
+  cd $CATALINA_HOME/bin/
+  tar -xvf tomcat-native.tar.gz
+  cd tomcat-native-*-src/native
+  ./configure --with-apr=/usr/local/apr --with-java-home=`echo $JAVA_HOME`
+  make
+  sudo make install
+)
+</pre>
+
+<h3 id="Configure-Tomcat-to-Use-APR"><a href="#Configure-Tomcat-to-Use-APR" class="headerlink" title="Configure Tomcat to Use APR"></a>Configure Tomcat to Use APR</h3><p>vim $CATALINA_HOME/bin/catalina.sh, add the following to the beginning of the content:<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">CATALINA_OPTS</span>=<span class="string">"-Djava.library.path=/usr/local/apr/lib"</span></div></pre></td></tr></table></figure></p>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/05/16/https-tomcat/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

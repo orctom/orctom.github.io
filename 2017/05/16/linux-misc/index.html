@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="Linux distribution info
+cat /etc/*-release
+lsb_release -a
+uname -mrs
+
+Check ram info
+sudo dmidecode -t memory
+sudo lshw -short -C memory
+
+ShellFile op">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Linux Misc | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/05/16/linux-misc/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>Linux Misc</h1>
+        
+        <div class="time-info">
+<time datetime="2017-05-16T15:37:42.000Z" itemprop="datePublished">May 16, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-distribution-info"><span class="toc-number">1.</span> <span class="toc-text">Linux distribution info</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Check-ram-info"><span class="toc-number">2.</span> <span class="toc-text">Check ram info</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shell"><span class="toc-number">3.</span> <span class="toc-text">Shell</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#File-operators"><span class="toc-number">3.1.</span> <span class="toc-text">File operators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#String-operators"><span class="toc-number">3.2.</span> <span class="toc-text">String operators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Number-operators"><span class="toc-number">3.3.</span> <span class="toc-text">Number operators</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Script-environment"><span class="toc-number">3.4.</span> <span class="toc-text">Script environment</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-files"><span class="toc-number"></span> <span class="toc-text">Open files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-Usage"><span class="toc-number"></span> <span class="toc-text">Network Usage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Password"><span class="toc-number">1.</span> <span class="toc-text">Password</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#random-password"><span class="toc-number">1.1.</span> <span class="toc-text">random password</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#nginx-basic-auth"><span class="toc-number">1.2.</span> <span class="toc-text">nginx basic auth</span></a></li></ol></li></ol>
+            </div>
+            
+            <h3 id="Linux-distribution-info"><a href="#Linux-distribution-info" class="headerlink" title="Linux distribution info"></a>Linux distribution info</h3><ul>
+<li><code>cat /etc/*-release</code></li>
+<li><code>lsb_release -a</code></li>
+<li><code>uname -mrs</code></li>
+</ul>
+<h3 id="Check-ram-info"><a href="#Check-ram-info" class="headerlink" title="Check ram info"></a>Check ram info</h3><ul>
+<li><code>sudo dmidecode -t memory</code></li>
+<li><code>sudo lshw -short -C memory</code></li>
+</ul>
+<h3 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h3><h4 id="File-operators"><a href="#File-operators" class="headerlink" title="File operators"></a>File operators</h4><table>
+<thead>
+<tr>
+<th>operator</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-e</td>
+<td>file exists</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>same as <code>-e</code>, deprecated</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>file is a regular file (not a directory or device file)</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>file is not zero size</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>file is a directory</td>
+</tr>
+<tr>
+<td>-b</td>
+<td>file is a block device</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>file is a character device</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>file is a pipe</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>file is a symbolic link</td>
+</tr>
+<tr>
+<td>-L</td>
+<td>file is a symbolic link</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>file is a socket</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>file is associated with a terminal device</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>file has read permission</td>
+</tr>
+<tr>
+<td>-w</td>
+<td>file has write permission</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>file has execution permission</td>
+</tr>
+<tr>
+<td>-O</td>
+<td>you are owner of file</td>
+</tr>
+<tr>
+<td>-G</td>
+<td>group-id of file same as yours</td>
+</tr>
+<tr>
+<td>-N</td>
+<td>file modified since it was last read</td>
+</tr>
+<tr>
+<td>f1 -nt f2</td>
+<td>file f1 is newer than f2</td>
+</tr>
+<tr>
+<td>f1 -ot f2</td>
+<td>file f1 is older than f2</td>
+</tr>
+<tr>
+<td>f1 -ef f2</td>
+<td>files f1 and f2 are hard links to the same file</td>
+</tr>
+</tbody>
+</table>
+<h4 id="String-operators"><a href="#String-operators" class="headerlink" title="String operators"></a>String operators</h4><table>
+<thead>
+<tr>
+<th>operator</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-n</td>
+<td>the length is nonzero</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>the length is zero</td>
+</tr>
+<tr>
+<td>s1 = s2</td>
+<td>two strings are identical</td>
+</tr>
+<tr>
+<td>s1 != s2</td>
+<td>two strings are not identical</td>
+</tr>
+<tr>
+<td>s1</td>
+<td>s1 is not null</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Number-operators"><a href="#Number-operators" class="headerlink" title="Number operators"></a>Number operators</h4><table>
+<thead>
+<tr>
+<th>operator</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-eq</td>
+<td>equal</td>
+</tr>
+<tr>
+<td>-ne</td>
+<td>not equal</td>
+</tr>
+<tr>
+<td>-gt</td>
+<td>greater than</td>
+</tr>
+<tr>
+<td>-ge</td>
+<td>greater or equal</td>
+</tr>
+<tr>
+<td>-lt</td>
+<td>less than</td>
+</tr>
+<tr>
+<td>-le</td>
+<td>less or equal</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Script-environment"><a href="#Script-environment" class="headerlink" title="Script environment"></a>Script environment</h4><ul>
+<li><code>set -x</code> Print commands and their arguments as they are executed.</li>
+<li><code>set +x</code> Disabling it.</li>
+</ul>
+<h2 id="Open-files"><a href="#Open-files" class="headerlink" title="Open files"></a>Open files</h2><p>List File Opened By a PID<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo lsof -<span class="selector-tag">p</span> &lt;pid&gt;</div></pre></td></tr></table></figure></p>
+<p>List File Descriptors in Kernel Memory<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo sysctl fs.<span class="keyword">file</span>-<span class="built_in">max</span></div></pre></td></tr></table></figure></p>
+<h2 id="Network-Usage"><a href="#Network-Usage" class="headerlink" title="Network Usage"></a>Network Usage</h2><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="keyword">get</span> install speedometer</div></pre></td></tr></table></figure>
+<h3 id="Password"><a href="#Password" class="headerlink" title="Password"></a>Password</h3><h4 id="random-password"><a href="#random-password" class="headerlink" title="random password"></a>random password</h4><figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">openssl</span> rand -<span class="keyword">base64 </span><span class="number">12</span></div></pre></td></tr></table></figure>
+<h4 id="nginx-basic-auth"><a href="#nginx-basic-auth" class="headerlink" title="nginx basic auth"></a>nginx basic auth</h4><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">location</span> /protected &#123;</div><div class="line">    <span class="attribute">autoindex</span> <span class="literal">on</span>;</div><div class="line">    <span class="attribute">auth_basic</span> <span class="string">"Restricted"</span>;</div><div class="line">    <span class="attribute">auth_basic_user_file</span> /etc/nginx/conf.d/.htpasswd;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">"user:<span class="variable">$(openssl passwd -1 password)</span>\n"</span> &gt;&gt; .htpasswd</div></pre></td></tr></table></figure>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/05/16/linux-misc/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

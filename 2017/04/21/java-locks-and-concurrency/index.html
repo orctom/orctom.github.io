@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="LocksImplicit LocksOr synchronized methods and synchronized blocks.
+Each object in java has a intrinsic lock associated with it.
+Synchronized methods ">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Java Locks and Concurrency | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/04/21/java-locks-and-concurrency/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>Java Locks and Concurrency</h1>
+        
+        <div class="time-info">
+<time datetime="2017-04-21T08:08:03.000Z" itemprop="datePublished">Apr 21, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Locks"><span class="toc-number">1.</span> <span class="toc-text">Locks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Implicit-Locks"><span class="toc-number">1.1.</span> <span class="toc-text">Implicit Locks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lock"><span class="toc-number">1.2.</span> <span class="toc-text">Lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ReadWriteLock"><span class="toc-number">1.3.</span> <span class="toc-text">ReadWriteLock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#StampedLock"><span class="toc-number">1.4.</span> <span class="toc-text">StampedLock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LockSupport"><span class="toc-number">1.5.</span> <span class="toc-text">LockSupport</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Concurrency"><span class="toc-number">2.</span> <span class="toc-text">Concurrency</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CountDownLatch"><span class="toc-number">2.1.</span> <span class="toc-text">CountDownLatch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CyclicBarrier"><span class="toc-number">2.2.</span> <span class="toc-text">CyclicBarrier</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Semaphore"><span class="toc-number">2.3.</span> <span class="toc-text">Semaphore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exchanger"><span class="toc-number">2.4.</span> <span class="toc-text">Exchanger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Atomic"><span class="toc-number">2.5.</span> <span class="toc-text">Atomic</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Blocking-Queues"><span class="toc-number">2.6.</span> <span class="toc-text">Blocking Queues</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ArrayBlockingQueue"><span class="toc-number">2.6.1.</span> <span class="toc-text">ArrayBlockingQueue</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LinkedBlockingQueue-LinkedBlockingDeque"><span class="toc-number">2.6.2.</span> <span class="toc-text">LinkedBlockingQueue / LinkedBlockingDeque</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SynchronousQueue"><span class="toc-number">2.6.3.</span> <span class="toc-text">SynchronousQueue</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DelayQueue"><span class="toc-number">2.6.4.</span> <span class="toc-text">DelayQueue</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LinkedTransferQueue"><span class="toc-number">2.6.5.</span> <span class="toc-text">LinkedTransferQueue</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PriorityBlockingQueue"><span class="toc-number">2.6.6.</span> <span class="toc-text">PriorityBlockingQueue</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Thread-Pools"><span class="toc-number">2.7.</span> <span class="toc-text">Thread Pools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Future"><span class="toc-number">2.8.</span> <span class="toc-text">Future</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CompletableFuture"><span class="toc-number">2.8.1.</span> <span class="toc-text">CompletableFuture</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ForkJoin"><span class="toc-number">2.9.</span> <span class="toc-text">ForkJoin</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ForkJoinPool"><span class="toc-number">2.9.1.</span> <span class="toc-text">ForkJoinPool</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Work-Stealing-Algorithm"><span class="toc-number">2.9.2.</span> <span class="toc-text">Work Stealing Algorithm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ForkJoinTask"><span class="toc-number">2.9.3.</span> <span class="toc-text">ForkJoinTask</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AQS"><span class="toc-number">3.</span> <span class="toc-text">AQS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Classes"><span class="toc-number">3.1.</span> <span class="toc-text">Classes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exclusive-Acquire"><span class="toc-number">3.2.</span> <span class="toc-text">Exclusive Acquire</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Release"><span class="toc-number">3.3.</span> <span class="toc-text">Release</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Deadlocks-Prevention"><span class="toc-number">4.</span> <span class="toc-text">Deadlocks Prevention</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">5.</span> <span class="toc-text">Reference</span></a></li></ol>
+            </div>
+            
+            <h2 id="Locks"><a href="#Locks" class="headerlink" title="Locks"></a>Locks</h2><h3 id="Implicit-Locks"><a href="#Implicit-Locks" class="headerlink" title="Implicit Locks"></a>Implicit Locks</h3><p>Or synchronized methods and synchronized blocks.</p>
+<p>Each object in java has a intrinsic lock associated with it.</p>
+<p>Synchronized methods use the lock of method owner object; Synchronized blocks, if you don’t pass in any object in, same as sychronized methods, otherwise, it use the object you passed in as the lock.</p>
+<p>Synchronized methods and blocks are reentrant.</p>
+<p><strong>Drawbacks</strong></p>
+<ul>
+<li>fairness lock</li>
+<li>read / write lock</li>
+</ul>
+<h3 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h3><p><img src="https://raw.githubusercontent.com/orctom/images/master/java/lock.png" alt="Lock"></p>
+<p>Here indicates its implementation <code>ReentrantLock</code>. Use <code>lock()</code> to aquire the lock and <code>unlock()</code> to release it. And make sure applying the try-finally pattern with it, in case of exceptions.</p>
+<h3 id="ReadWriteLock"><a href="#ReadWriteLock" class="headerlink" title="ReadWriteLock"></a>ReadWriteLock</h3><p>Or its implementation <code>ReentrantReadWriteLock</code>, which defined a pair of locks for read and write access. It allows multiply read threads holding the read lock when no write lock been hold. It would improve the throughput for circonstances that reads are more frequent than writes.</p>
+<h3 id="StampedLock"><a href="#StampedLock" class="headerlink" title="StampedLock"></a>StampedLock</h3><p>Also provide read/write locks, but is <strong>NOT reentrant</strong>.</p>
+<p>The locking methods of a StampedLock return a stamp represented (a long value), which can be used to release a lock or to check if the lock is still valid.</p>
+<ul>
+<li><code>readLock()</code>: exclusive blocking</li>
+<li><code>writeLock()</code>: non-exclusive blocking</li>
+<li><code>tryOptimisticRead()</code>: returns a non-zero stamp only if the lock is not currently held in write mode, and you have to use <code>validate(stamp)</code> (might be repeatablly) to test if any write lock has break it</li>
+<li><code>tryConvertToWriteLock()</code>: try to convert a read lock to write lock</li>
+</ul>
+<h3 id="LockSupport"><a href="#LockSupport" class="headerlink" title="LockSupport"></a>LockSupport</h3><p>At most one permit, but permit can prepared before acquiring.</p>
+<ul>
+<li><code>park()</code> to block the thread waiting for a permit</li>
+<li><p><code>unpark(thread)</code> to add a permit (not accumulate) to the thread</p>
+</li>
+<li><p>thread.interrupt() can also unpark the thread, but won’t throw InterrupptedException</p>
+</li>
+<li>park will return if the caller’s thread was interrupted</li>
+<li>unpark can be invoked before park</li>
+<li>parking methods may return spuriously, so it is important to call park() in a loop that can repark the thread if it should not have resumed</li>
+<li>the blocker object is for diagnose purpose</li>
+</ul>
+<h2 id="Concurrency"><a href="#Concurrency" class="headerlink" title="Concurrency"></a>Concurrency</h2><p><img src="https://raw.githubusercontent.com/orctom/images/master/java/java-concurrent-collections.png" alt="Concurrent Collections"></p>
+<h3 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h3><p>A latch that multiply threads waiting for, will be notified only <strong>once</strong> when the counter reaches zero.</p>
+<h3 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h3><p>Repeatable <code>CountDownLatch</code>.</p>
+<h3 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h3><p>Only n processes can access a certain resource at a given time.</p>
+<ul>
+<li><code>acquire()</code> will block until permits are available</li>
+<li><code>release()</code> to release a permit</li>
+<li><code>acquireInterruptibly()</code> acquire a resource, reattempting if it is interrupted</li>
+<li><code>tryAcquire()</code> can limit how long we will wait for a permit</li>
+</ul>
+<p>Some tricks:</p>
+<ul>
+<li>Release doesn’t have to be called by the same thread as acquire, or the permit is <strong>accumulate</strong></li>
+<li>Increase the number of permits at runtime (<code>release()</code> will always increase the number of permits)</li>
+</ul>
+<h3 id="Exchanger"><a href="#Exchanger" class="headerlink" title="Exchanger"></a>Exchanger</h3><p><strong>GC-less</strong> exchange data between only <strong>two</strong> threads.</p>
+<h3 id="Atomic"><a href="#Atomic" class="headerlink" title="Atomic"></a>Atomic</h3><p>Atomic classes utlize CAS (compare-and-swap), which is directly supported by CPUs, so it’s much faster than synchronized and locks.</p>
+<ul>
+<li><code>AtomicBoolean</code></li>
+<li><code>AtomicInteger</code></li>
+<li><code>AtomicLong</code></li>
+<li><code>AtomicReference</code></li>
+<li><code>LongAdder</code>: preferable if more write threads than read threads, but take more memory</li>
+<li><code>LongAccumulator</code>: generalized version of LongAdder, use <code>LongBinaryOperator</code> as operations</li>
+</ul>
+<h3 id="Blocking-Queues"><a href="#Blocking-Queues" class="headerlink" title="Blocking Queues"></a>Blocking Queues</h3><h4 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a><code>ArrayBlockingQueue</code></h4><ul>
+<li>fixed size</li>
+<li>array-based</li>
+<li>best performance</li>
+<li>single-lock double condition algorithm</li>
+</ul>
+<h4 id="LinkedBlockingQueue-LinkedBlockingDeque"><a href="#LinkedBlockingQueue-LinkedBlockingDeque" class="headerlink" title="LinkedBlockingQueue / LinkedBlockingDeque"></a><code>LinkedBlockingQueue</code> / <code>LinkedBlockingDeque</code></h4><ul>
+<li>linked-list based</li>
+<li>2 locks 2 conditions</li>
+</ul>
+<h4 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a><code>SynchronousQueue</code></h4><ul>
+<li>zero capacity</li>
+<li>the thread inserting data will block until there is a thread to remove that data or vice-versa</li>
+<li>does not permit null elements</li>
+</ul>
+<h4 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a><code>DelayQueue</code></h4><ul>
+<li>blocks the elements internally until a certain delay has expired</li>
+<li>elements must implement <code>java.util.concurrent.Delayed</code></li>
+</ul>
+<h4 id="LinkedTransferQueue"><a href="#LinkedTransferQueue" class="headerlink" title="LinkedTransferQueue"></a><code>LinkedTransferQueue</code></h4><ul>
+<li>waits for consumer to consume the element (message passing need to be guaranteed)</li>
+</ul>
+<h4 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a><code>PriorityBlockingQueue</code></h4><ul>
+<li>concurrent version of <code>PriorityQueue</code></li>
+</ul>
+<h3 id="Thread-Pools"><a href="#Thread-Pools" class="headerlink" title="Thread Pools"></a>Thread Pools</h3><p><img src="https://raw.githubusercontent.com/orctom/images/master/java/java-concurrent-executors.png" alt="Executors"></p>
+<ul>
+<li><code>newCachedThreadPool()</code>: reuses threads when possible, creates new ones as needed with no configured limit</li>
+<li><code>newFixedThreadPool(int nThreads)</code>: uses only up to the number of threads specified</li>
+<li><code>newScheduledThreadPool(int corePoolSize)</code>: schedules threads with delayed execution, returns <code>ScheduledExecutorService</code> with:<ul>
+<li><code>schedule(Runnable command, long delay, TimeUnit unit)</code></li>
+<li><code>scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit)</code></li>
+<li><code>scheduleWithFixedDelay(Runnable command, long initialDelay, long delay, TimeUnit unit)</code></li>
+</ul>
+</li>
+<li><code>newSingleThreadExecutor()</code> and <code>newSingleThreadScheduledExecutor()</code>: a single thread/task is executing at a time.</li>
+</ul>
+<h3 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h3><p><img src="https://raw.githubusercontent.com/orctom/images/master/java/java-concurrent-future.png" alt="Future"></p>
+<h4 id="CompletableFuture"><a href="#CompletableFuture" class="headerlink" title="CompletableFuture"></a>CompletableFuture</h4><p>Some methods</p>
+<table>
+<thead>
+<tr>
+<th>method</th>
+<th>parameter</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>supplyAsync</td>
+<td>Supplier&lt;U&gt; -&gt; U</td>
+<td>apply a function to the result</td>
+</tr>
+<tr>
+<td>thenApply</td>
+<td>T -&gt; U</td>
+<td>apply a function to the result</td>
+</tr>
+<tr>
+<td>thenAccept</td>
+<td>T -&gt; void</td>
+<td>like <code>thenApplay</code> but with no return value</td>
+</tr>
+<tr>
+<td>handle</td>
+<td>(T, Throwable) -&gt; U</td>
+<td>process the error result</td>
+</tr>
+<tr>
+<td>whenComplete</td>
+<td>(T, Throwable) -&gt; void</td>
+<td>like <code>handle</code> but with not return value</td>
+</tr>
+<tr>
+<td>thenCompose</td>
+<td>T -&gt; CompletableFuture<u></u></td>
+<td>invoke the function on the result and esecute returned future</td>
+</tr>
+<tr>
+<td>thenRun</td>
+<td>Runnable</td>
+<td>execute the runnable</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ForkJoin"><a href="#ForkJoin" class="headerlink" title="ForkJoin"></a>ForkJoin</h3><p>The fork/join framework is to parallel processing tasks by trying to use all available processor cores.<br>Tasks are stored in a deque.</p>
+<p>It can speed up processing of large tasks, but should follow these guidelines:</p>
+<ul>
+<li>Use as few thread pools as possible</li>
+<li>Use the default common thread pool</li>
+<li>Use a reasonable threshold</li>
+<li>Avoid any blocking in your ForkJoingTasks</li>
+</ul>
+<h4 id="ForkJoinPool"><a href="#ForkJoinPool" class="headerlink" title="ForkJoinPool"></a>ForkJoinPool</h4><p>The ForkJoinPool which implemented <code>ExecutorService</code>, is the heart of the framework.</p>
+<h4 id="Work-Stealing-Algorithm"><a href="#Work-Stealing-Algorithm" class="headerlink" title="Work Stealing Algorithm"></a>Work Stealing Algorithm</h4><p>Free threads try to “steal” work from deques of busy threads from tail.</p>
+<p>By default, a worker thread gets tasks from the head of its own deque. When it is empty, the thread takes a task from the tail of the deque of another busy thread or from the global entry queue</p>
+<h4 id="ForkJoinTask"><a href="#ForkJoinTask" class="headerlink" title="ForkJoinTask"></a>ForkJoinTask<v></v></h4><p>The base type for tasks executed inside ForkJoinPool.<br>Your task class should extend either <code>RecursiveAction</code> for void tasks, or <code>RecursiveTask&lt;V&gt;</code> for tasks that return a value.</p>
+<h2 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h2><p>Or <code>AbstractQueuedSynchronizer</code>.<br>It provides a framework for implementing blocking locks and related synchronizers like semaphores, by using a CLH derived queue, where each node represent a thread, consists of the following properties:</p>
+<table>
+<thead>
+<tr>
+<th>properties</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>prev:Node</td>
+<td>previous node</td>
+</tr>
+<tr>
+<td>next:Node</td>
+<td>next node</td>
+</tr>
+<tr>
+<td>thread:Thread</td>
+<td>the thread that enqueued this node</td>
+</tr>
+<tr>
+<td>nextWaiter:Node</td>
+<td>Link to next node waiting on condition, or the special value SHARED</td>
+</tr>
+<tr>
+<td>waitStatus:int</td>
+<td>see bellow</td>
+</tr>
+</tbody>
+</table>
+<p><strong>waitStatus</strong></p>
+<ul>
+<li>0: new node or to be updated, or releasing</li>
+<li>CANCELLED = 1: been cancelled due to timeout or interrupt, will be removed from the queue</li>
+<li>SIGNAL = -1: the successor of this node is (or will soon be) blocked (via park), so the current node must unpark its successor when it releases or cancels</li>
+<li>CONDITION = -2: on a condition queue, will not be used as a sync queue node until transferred (waitState -&gt; 0)</li>
+<li>PROPAGATE = -3: a releaseShared should be propagated to other nodes. in shared mode, the head node could be in this state</li>
+</ul>
+<h3 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h3><p><img src="https://raw.githubusercontent.com/orctom/images/master/java/aqs.png" alt="Classes"></p>
+<p>To implement your own synchronizer, you would focus on the following methods:</p>
+<ul>
+<li>isHeldExclusively()</li>
+<li>tryAcquire(int)</li>
+<li>tryRelease(int)</li>
+<li>tryAcquireShared(int)</li>
+<li>tryReleaseShared(int)</li>
+</ul>
+<h3 id="Exclusive-Acquire"><a href="#Exclusive-Acquire" class="headerlink" title="Exclusive Acquire"></a>Exclusive Acquire</h3><p><img src="https://raw.githubusercontent.com/orctom/images/master/java/aqs-acquire-exclusive.png" alt="Exclusive Acquire"></p>
+<h3 id="Release"><a href="#Release" class="headerlink" title="Release"></a>Release</h3><p><img src="https://raw.githubusercontent.com/orctom/images/master/java/aqs-release.png" alt="Release"></p>
+<h2 id="Deadlocks-Prevention"><a href="#Deadlocks-Prevention" class="headerlink" title="Deadlocks Prevention"></a>Deadlocks Prevention</h2><ul>
+<li>acquire multiple locks in a consistent order</li>
+<li>don’t execute foreign code while holding a lock</li>
+<li>use interruptible locks</li>
+</ul>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://www.javacodegeeks.com/2011/09/java-concurrency-tutorial.html" target="_blank" rel="external">https://www.javacodegeeks.com/2011/09/java-concurrency-tutorial.html</a></li>
+<li><a href="http://winterbe.com/posts/2015/04/30/java8-concurrency-tutorial-synchronized-locks-examples/" target="_blank" rel="external">http://winterbe.com/posts/2015/04/30/java8-concurrency-tutorial-synchronized-locks-examples/</a></li>
+<li><a href="http://www.javarticles.com/2012/10/abstractqueuedsynchronizer-aqs.html" target="_blank" rel="external">http://www.javarticles.com/2012/10/abstractqueuedsynchronizer-aqs.html</a></li>
+<li><a href="https://www.ibm.com/developerworks/java/library/j-jtp05236/index.html" target="_blank" rel="external">https://www.ibm.com/developerworks/java/library/j-jtp05236/index.html</a></li>
+<li><a href="http://gee.cs.oswego.edu/dl/papers/fj.pdf" target="_blank" rel="external">http://gee.cs.oswego.edu/dl/papers/fj.pdf</a></li>
+</ul>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/04/21/java-locks-and-concurrency/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

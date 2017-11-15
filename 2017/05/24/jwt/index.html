@@ -1,0 +1,155 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="What is Json Web TokenA compact, URL-safe means of representing claims to be transferred between two parties.The server side creates a signature with ">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Json Web Token | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/05/24/jwt/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>Json Web Token</h1>
+        
+        <div class="time-info">
+<time datetime="2017-05-24T14:13:14.000Z" itemprop="datePublished">May 24, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#What-is-Json-Web-Token"><span class="toc-number">1.</span> <span class="toc-text">What is Json Web Token</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Format"><span class="toc-number">2.</span> <span class="toc-text">Format</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#header"><span class="toc-number">2.1.</span> <span class="toc-text">header</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#payload"><span class="toc-number">2.2.</span> <span class="toc-text">payload</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#signature"><span class="toc-number">2.3.</span> <span class="toc-text">signature</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Putting-all-together"><span class="toc-number">2.4.</span> <span class="toc-text">Putting all together</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#How-it-works"><span class="toc-number">3.</span> <span class="toc-text">How it works</span></a></li></ol>
+            </div>
+            
+            <h3 id="What-is-Json-Web-Token"><a href="#What-is-Json-Web-Token" class="headerlink" title="What is Json Web Token"></a>What is Json Web Token</h3><p>A compact, URL-safe means of representing claims to be transferred between two parties.<br>The server side creates a signature with a preconfigured secret key, and send the signature with the content to client.<br>When the client visit the server again with the token, the server can verify the token to trust the content in the token, without looking up databases.<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">hash</span><span class="params">(user_info + secret_key)</span></span></div></pre></td></tr></table></figure></p>
+<h3 id="Format"><a href="#Format" class="headerlink" title="Format"></a>Format</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span>.<span class="tag">&lt;<span class="name">payload</span>&gt;</span>.<span class="tag">&lt;<span class="name">signature</span>&gt;</span></div></pre></td></tr></table></figure>
+<h4 id="header"><a href="#header" class="headerlink" title="header"></a>header</h4><p>Base64Url encoded of json such as:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"alg"</span>: <span class="string">"HS256"</span>,</div><div class="line">  <span class="attr">"typ"</span>: <span class="string">"JWT"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Standard fields:</p>
+<ul>
+<li>Token type (typ)</li>
+<li>Content type (cty): This claim should always be <code>JWT</code></li>
+<li>Algorithm (alg): <code>HS256</code></li>
+</ul>
+<h4 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h4><p>A.K.A claims, which are the statements of the users, and additional metadata.<br>Base64Url encoded of json such as:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"sub"</span>: <span class="string">"1234567890"</span>,</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"John Doe"</span>,</div><div class="line">  <span class="attr">"admin"</span>: <span class="literal">true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Standard fields:</p>
+<ul>
+<li>Issuer (iss): The principal that issued the token</li>
+<li>Subject (sub): The subject of the token</li>
+<li>Audience (aud):  The claim or user that the token is issued for</li>
+<li>Expiration time (exp): Expiration time</li>
+<li>Not before (nbf): Similarly, the not-before time claim identifies the time on which the JWT will start to be accepted for processing.</li>
+<li>Issued at (iat) - The “iat” (issued at) claim identifies the time at which the JWT was issued</li>
+<li>JWT ID (jti) - case sensitive unique identifier of the token even among different issuers</li>
+</ul>
+<h4 id="signature"><a href="#signature" class="headerlink" title="signature"></a>signature</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">HMACSHA256(<span class="tag">&lt;<span class="name">header</span>&gt;</span>.<span class="tag">&lt;<span class="name">payload</span>&gt;</span>, <span class="tag">&lt;<span class="name">your_secure</span>&gt;</span>)</div></pre></td></tr></table></figure>
+<h4 id="Putting-all-together"><a href="#Putting-all-together" class="headerlink" title="Putting all together"></a>Putting all together</h4><figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">|<span class="type">&lt;---- header</span> -----&gt;|       <span class="type">|&lt;----- payload</span> -----&gt;|       <span class="type">|&lt;----------------------- signature</span> --------------------------&gt;|</div><div class="line"><span class="type">base64Encode</span>(header) + <span class="string">"."</span> + base64Encode(payload) + <span class="string">"."</span> + HMACSHA256(base64Encode(header + <span class="string">"."</span> + payload), &lt;your_secure&gt;)</div></pre></td></tr></table></figure>
+<h3 id="How-it-works"><a href="#How-it-works" class="headerlink" title="How it works"></a>How it works</h3><ul>
+<li>Server generates a <code>secret</code> (prepare before startup) and make it secure, and avaialbe only to server.</li>
+<li>Client requests for a token. (by using credential to identify the client is a valid client)</li>
+<li>Server generates a <code>token</code> with a <code>secret</code>.</li>
+<li>Server returns the <code>token</code>.</li>
+<li>Client stores the <code>token</code> to local storage.</li>
+<li>Client visits protected resources on server with the <code>token</code>.<ul>
+<li>Typically in the <em>Authorization</em> header</li>
+<li><code>Authorization: Bearer &lt;token&gt;</code></li>
+</ul>
+</li>
+<li>Server verifies the <code>token</code>‘s signature by creating a signature and comparing if the two are equal, then retrives client informations, without looking up databases.</li>
+</ul>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/05/24/jwt/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

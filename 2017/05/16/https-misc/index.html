@@ -1,0 +1,148 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="JCEJava Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files.
+If you need keys that longer than 1024 bits. Unzip the jce package ">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HTTPS Misc | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/05/16/https-misc/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>HTTPS Misc</h1>
+        
+        <div class="time-info">
+<time datetime="2017-05-16T15:38:37.000Z" itemprop="datePublished">May 16, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#JCE"><span class="toc-number">1.</span> <span class="toc-text">JCE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK-7"><span class="toc-number">1.1.</span> <span class="toc-text">JDK 7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK-8"><span class="toc-number">1.2.</span> <span class="toc-text">JDK 8</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-Formats"><span class="toc-number">2.</span> <span class="toc-text">File Formats</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pem"><span class="toc-number">2.1.</span> <span class="toc-text">.pem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#csr"><span class="toc-number">2.2.</span> <span class="toc-text">.csr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#key"><span class="toc-number">2.3.</span> <span class="toc-text">.key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pkcs12-pfx-p12"><span class="toc-number">2.4.</span> <span class="toc-text">.pkcs12 .pfx .p12</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#der"><span class="toc-number">2.5.</span> <span class="toc-text">.der</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cert-cer-crt"><span class="toc-number">2.6.</span> <span class="toc-text">.cert .cer .crt</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Openssl"><span class="toc-number">3.</span> <span class="toc-text">Openssl</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Keytool"><span class="toc-number">4.</span> <span class="toc-text">Keytool</span></a></li></ol>
+            </div>
+            
+            <h2 id="JCE"><a href="#JCE" class="headerlink" title="JCE"></a>JCE</h2><p>Java Cryptography Extension (JCE) Unlimited Strength Jurisdiction Policy Files.</p>
+<p>If you need keys that longer than 1024 bits. Unzip the <code>jce</code> package into <code>$JAVA_HOME/lib/security/</code></p>
+<h3 id="JDK-7"><a href="#JDK-7" class="headerlink" title="JDK 7"></a>JDK 7</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -jkLH <span class="string">"Cookie: oraclelicense=accept-securebackup-cookie"</span> http:<span class="regexp">//</span>download.oracle.com<span class="regexp">/otn-pub/</span>java<span class="regexp">/jce/</span><span class="number">7</span><span class="regexp">/UnlimitedJCEPolicyJDK7.zip -o UnlimitedJCEPolicyJDK7.zip</span></div></pre></td></tr></table></figure>
+<h3 id="JDK-8"><a href="#JDK-8" class="headerlink" title="JDK 8"></a>JDK 8</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -jkLH <span class="string">"Cookie: oraclelicense=accept-securebackup-cookie"</span> http:<span class="regexp">//</span>download.oracle.com<span class="regexp">/otn-pub/</span>java<span class="regexp">/jce/</span><span class="number">8</span><span class="regexp">/jce_policy-8.zip -o jce_policy-8.zip</span></div></pre></td></tr></table></figure>
+<h2 id="File-Formats"><a href="#File-Formats" class="headerlink" title="File Formats"></a>File Formats</h2><h3 id="pem"><a href="#pem" class="headerlink" title=".pem"></a>.pem</h3><p>Privacy Enhanced Mail, a way of encoding data.<br>It may contain:</p>
+<ul>
+<li>public key (certificate)</li>
+<li>private key</li>
+<li>CA certificates (root, chain)</li>
+<li>CSR pkcs10 encoded (not common)</li>
+</ul>
+<h3 id="csr"><a href="#csr" class="headerlink" title=".csr"></a>.csr</h3><p>Format of pkcs10, you generate csr and submit it to the CA to generate your certificate.</p>
+<h3 id="key"><a href="#key" class="headerlink" title=".key"></a>.key</h3><p>Private key or public key.</p>
+<h3 id="pkcs12-pfx-p12"><a href="#pkcs12-pfx-p12" class="headerlink" title=".pkcs12 .pfx .p12"></a>.pkcs12 .pfx .p12</h3><p>A passworded container format that contains both public and private certificate pairs. Unlike .pem files, this container is fully encrypted.<br>Openssl can turn this into a .pem file with both public and private keys:<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">openssl pkcs12 \</div><div class="line">  -<span class="ruby">nodes \</span></div><div class="line">  -<span class="ruby"><span class="keyword">in</span> file-to-convert.p12 \</span></div><div class="line">  -<span class="ruby">out converted-file.pem</span></div></pre></td></tr></table></figure></p>
+<h3 id="der"><a href="#der" class="headerlink" title=".der"></a>.der</h3><p>The parent format of PEM. It’s useful to think of it as a binary version of the base64-encoded PEM file. Not routinely used by much outside of Windows.</p>
+<h3 id="cert-cer-crt"><a href="#cert-cer-crt" class="headerlink" title=".cert .cer .crt"></a>.cert .cer .crt</h3><p>A .pem (or rarely .der) formatted file with a different extension, one that is recognized by Windows Explorer as a certificate, which .pem is not.</p>
+<p>### </p>
+<h2 id="Openssl"><a href="#Openssl" class="headerlink" title="Openssl"></a>Openssl</h2><p>Generate a new private key and Certificate Signing Request<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">openssl req \</div><div class="line">  -<span class="ruby">newkey <span class="symbol">rsa:</span><span class="number">2048</span> \</span></div><div class="line">  -<span class="ruby">nodes \</span></div><div class="line">  -<span class="ruby">keyout private.key \</span></div><div class="line">  -<span class="ruby">out domain.csr</span></div></pre></td></tr></table></figure></p>
+<p>Generate a self-signed certificate<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">openssl req \</div><div class="line">  -<span class="ruby">x509 \</span></div><div class="line">  -<span class="ruby">sha256 \</span></div><div class="line">  -<span class="ruby">nodes \</span></div><div class="line">  -<span class="ruby">days <span class="number">3600</span> \</span></div><div class="line">  -<span class="ruby">newkey <span class="symbol">rsa:</span><span class="number">2048</span> \</span></div><div class="line">  -<span class="ruby">keyout private.key</span></div><div class="line">  -<span class="ruby">out certificate.crt</span></div></pre></td></tr></table></figure></p>
+<p>Generate a certificate signing request (CSR) for an existing private key<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">openssl req \</div><div class="line">  -<span class="ruby">new \</span></div><div class="line">  -<span class="ruby">key private.key \</span></div><div class="line">  -<span class="ruby">out domain.csr</span></div></pre></td></tr></table></figure></p>
+<p>Remove a passphrase from a private key<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">openssl rsa -<span class="keyword">in</span> privateKey.pem -out <span class="keyword">new</span><span class="type">PrivateKey</span>.pem</div></pre></td></tr></table></figure></p>
+<p>Convert DER file (.crt .cer .der) to PEM<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">openssl x509 \</div><div class="line">  -<span class="ruby">inform der \</span></div><div class="line">  -<span class="ruby"><span class="keyword">in</span> cert.cer \</span></div><div class="line">  -<span class="ruby">out cert.pem</span></div></pre></td></tr></table></figure></p>
+<p>Convert PEM file to DER<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">openssl x509 \</div><div class="line">  -<span class="ruby">outform der \</span></div><div class="line">  -<span class="ruby"><span class="keyword">in</span> cert.pem \</span></div><div class="line">  -<span class="ruby">out certi.der</span></div></pre></td></tr></table></figure></p>
+<p>Importing an existing certificate into a PKCS12 keystore<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">openssl pkcs12 -export \</div><div class="line">  -<span class="ruby"><span class="keyword">in</span> domain.crt \</span></div><div class="line">  -<span class="ruby">inkey domain.key \</span></div><div class="line">  -<span class="ruby">out domain.p12 \</span></div><div class="line">  -<span class="ruby">name tomcat \</span></div><div class="line">  -<span class="ruby">CAfile ca.crt \</span></div><div class="line">  -<span class="ruby">caname root \</span></div><div class="line">  -<span class="ruby">chain</span></div></pre></td></tr></table></figure></p>
+<h2 id="Keytool"><a href="#Keytool" class="headerlink" title="Keytool"></a>Keytool</h2><p>Create a keystore file to store the server’s private key and self-signed certificate<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">keytool -genkey \</div><div class="line">  -<span class="ruby"><span class="keyword">alias</span> domain.com \</span></div><div class="line">  -<span class="ruby">keyalg RSA \</span></div><div class="line">  -<span class="ruby">keystore keystore.jks \</span></div><div class="line">  -<span class="ruby">validity <span class="number">3600</span></span></div></pre></td></tr></table></figure></p>
+<p>Create a CSR based on the keystore<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">keytool -certreq \</div><div class="line">  -<span class="ruby">keyalg RSA \</span></div><div class="line">  -<span class="ruby"><span class="keyword">alias</span> tomcat \</span></div><div class="line">  -<span class="ruby">file certreq.csr</span></div><div class="line">  -<span class="ruby">keystore keystore.jks</span></div></pre></td></tr></table></figure></p>
+<p>Import the self-signed certificate into JRE’s keystore, so that your Java program can communicate with remote servers that serve https services with that self-signed certificate<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">keytool -importcert \</div><div class="line">  -<span class="ruby">keystore <span class="string">"$JAVA_HOME/lib/security/cacerts"</span> \</span></div><div class="line">  -<span class="ruby">file corp.cer \</span></div><div class="line">  -<span class="ruby"><span class="keyword">alias</span> corpcert</span></div></pre></td></tr></table></figure></p>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/05/16/https-misc/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

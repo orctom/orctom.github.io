@@ -1,0 +1,199 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="RabbitMQ
+AMQP
+less scalable
+relatively slow, as the central node adds latency and big message envelopes
+supports persistence across reboot
+
+ZeroMQ
+AMQ">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MQ | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/05/16/mq/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>MQ</h1>
+        
+        <div class="time-info">
+<time datetime="2017-05-16T15:40:26.000Z" itemprop="datePublished">May 16, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#RabbitMQ"><span class="toc-number">1.</span> <span class="toc-text">RabbitMQ</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ZeroMQ"><span class="toc-number">2.</span> <span class="toc-text">ZeroMQ</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ActiveMQ"><span class="toc-number">3.</span> <span class="toc-text">ActiveMQ</span></a></li></ol>
+            </div>
+            
+            <h3 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h3><ul>
+<li>AMQP</li>
+<li>less scalable</li>
+<li>relatively slow, as the central node adds latency and big message envelopes</li>
+<li>supports persistence across reboot</li>
+</ul>
+<h3 id="ZeroMQ"><a href="#ZeroMQ" class="headerlink" title="ZeroMQ"></a>ZeroMQ</h3><ul>
+<li>AMQP</li>
+<li>lightweight</li>
+<li>high throughput / low latency</li>
+<li>very flexable, that you’ll have to implement features that provided by RabbitMQ by youself</li>
+<li>doesn’t support persistence across reboot</li>
+</ul>
+<h3 id="ActiveMQ"><a href="#ActiveMQ" class="headerlink" title="ActiveMQ"></a>ActiveMQ</h3><ul>
+<li>in the middle</li>
+<li>Persistence<ul>
+<li>KahahDB (default), since 5.3</li>
+<li>LevelDB (future, as it’s faster and cheaper), since 5.8</li>
+</ul>
+</li>
+<li>AMQP v1.0</li>
+<li>MQTT v3.1</li>
+<li>Durable:</li>
+<li>Persistent</li>
+<li>protocols:<ul>
+<li>static: defining networks of brokers with known addresses</li>
+<li>failover: providing reconnection logic even for a single broker</li>
+<li>multicast: defining dynamic networks of brokers</li>
+<li>discovery: clients to connect dynamic network of brokers</li>
+<li>peer: connecting multipile enbedded brokers</li>
+<li>fanout: producing messages to multipile unconnected brokers</li>
+</ul>
+</li>
+<li>message store<ul>
+<li>KahaDB</li>
+<li>AMQ: best option when throughput is the main requirement.</li>
+</ul>
+<ul>
+<li>two seperated files for each index</li>
+<li>an index per destination</li>
+<li>So, do not use it if you have thousands of queues, as rebuildindexes takes a long while</li>
+</ul>
+<ul>
+<li>JDBC</li>
+<li>Memory</li>
+</ul>
+<ul>
+<li>finite amount of messages, and will be consumed quickly</li>
+<li>which is actually setting <code>persistent</code> to <code>false</code></li>
+</ul>
+<ul>
+<li>Caching</li>
+</ul>
+<ul>
+<li>caching messages for reconnection, so that it recovers quickly</li>
+<li><code>subscription recovery policy</code><ul>
+<li>fixed size (default)</li>
+<li>fixed count</li>
+<li>query based (matching)</li>
+<li>timed</li>
+<li>last image</li>
+<li>no</li>
+</ul>
+</li>
+<li>HA</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Shared nothing (when some down time on failure is acceptable)</li>
+<li>Shared storage</li>
+</ul>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/05/16/mq/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="Technical Terminology
+Connection: A network connection, e.g. a TCP/IP socket connection
+Channel: A bi-directional stream of communications between two">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AMQP | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/05/24/amqp/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>AMQP</h1>
+        
+        <div class="time-info">
+<time datetime="2017-05-24T14:13:14.000Z" itemprop="datePublished">May 24, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Technical-Terminology"><span class="toc-number">1.</span> <span class="toc-text">Technical Terminology</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RabbitMQ"><span class="toc-number">2.</span> <span class="toc-text">RabbitMQ</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#AMQP-Model"><span class="toc-number">2.1.</span> <span class="toc-text">AMQP Model</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Channels"><span class="toc-number">2.1.1.</span> <span class="toc-text">Channels</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Exchange"><span class="toc-number">2.1.2.</span> <span class="toc-text">Exchange</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Direct"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">Direct</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Fanout"><span class="toc-number">2.1.2.2.</span> <span class="toc-text">Fanout</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Topic"><span class="toc-number">2.1.2.3.</span> <span class="toc-text">Topic</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Message-Queue"><span class="toc-number">2.1.3.</span> <span class="toc-text">Message Queue</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Binding"><span class="toc-number">2.1.4.</span> <span class="toc-text">Binding</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NPM-libs"><span class="toc-number">3.</span> <span class="toc-text">NPM libs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Logstash"><span class="toc-number">4.</span> <span class="toc-text">Logstash</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Output-logstash-gt-mq"><span class="toc-number">4.1.</span> <span class="toc-text">Output (logstash -> mq)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Input-mq-gt-logstash"><span class="toc-number">4.2.</span> <span class="toc-text">Input (mq -> logstash)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Some-links"><span class="toc-number">5.</span> <span class="toc-text">Some links</span></a></li></ol>
+            </div>
+            
+            <h3 id="Technical-Terminology"><a href="#Technical-Terminology" class="headerlink" title="Technical Terminology"></a>Technical Terminology</h3><ul>
+<li><strong>Connection</strong>: A network connection, e.g. a TCP/IP socket connection</li>
+<li><strong>Channel</strong>: A bi-directional stream of communications between two AMQP peers. Channels are multiplexed so that a single network connection can carry multiple channels</li>
+<li><strong>Client</strong>: The initiator of an AMQP connection or channel. AMQP is not symmetrical. Clients produce and consume messages while servers queue and route messages</li>
+<li><strong>Server</strong>: The process that accepts client connections and implements the AMQP message queueing and routing functions. Also known as “broker”</li>
+<li><strong>Peer</strong>: Either party in an AMQP connection. An AMQP connection involves exactly two peers (one is the client, one is the server)</li>
+<li><strong>Frame</strong>: A formally-defined package of connection data. Contiguously - as a single unit - on the connection</li>
+<li><strong>Protocol Class</strong>: A collection of AMQP commands (also known as Methods) that deal with a specific type of functionality</li>
+<li><strong>Method</strong>: A specific type of AMQP command frame that passes instructions from one peer to the other</li>
+<li><strong>Content</strong>: Application data passed from client to server and from server to client. AMQP content can be structured into multiple parts. The term is synonymous with “message”</li>
+<li><strong>Content Header</strong>: A specific type of frame that describes a content’s properties</li>
+<li><strong>Content Body</strong>: A specific type of frame that contains raw application data. Content body frames are entirely opaque - the server does not examine or modify these in any way</li>
+<li><strong>Message</strong>: Synonymous with “content”</li>
+<li><strong>Exchange</strong>: The entity within the server which receives messages from producer applications and optionally routes these to message queues within the server</li>
+<li><strong>Exchange Type</strong>: The algorithm and implementation of a particular model of exchange. In contrast to the “exchange instance”, which is the entity that receives and routes messages within the server</li>
+<li><strong>Message queue</strong>: A named entity that holds messages and forwards them to consumer applications.</li>
+<li><strong>Binding</strong>: An entity that creates a relationship between a message queue and an exchange</li>
+<li><strong>Routing key</strong>: A virtual address that an exchange may use to decide how to route a specific message</li>
+<li><strong>Durable</strong>: A server resource that survives a server restart</li>
+<li><strong>Transient</strong>: A server resource that is wiped or reset after a server restart</li>
+<li><strong>Persistent</strong>: A message that the server holds on reliable disk storage and MUST NOT lose after a server restart</li>
+<li><strong>Non-persistent</strong>: A message that the server holds in memory and MAY lose after a server restart</li>
+<li><strong>Consumer</strong>: A client application that requests messages from a message queue</li>
+<li><strong>Producer</strong>: A client application that publishes messages to an exchange</li>
+<li><strong>Virtual host</strong>: A collection of exchanges, message queues and associated objects. Virtual hosts are independent server domains that share a common authentication and encryption environment. The client application chooses a virtual host after logging in to the server</li>
+<li><strong>Realm</strong>: A set of server resources (exchanges and message queues) covered by a single security policy and access control. Applications ask for access rights for specific realms, rather than for specific resources</li>
+<li><strong>Ticket</strong>: A token that a server provides to a client, for access to a specific realm</li>
+<li><strong>Streaming</strong>: The process by which the server will send messages to the client at a pre-arranged rate</li>
+<li><strong>Staging</strong>: The process by which a peer will transfer a large message to a temporary holding area before formally handing it over to the recipient. This is how AMQP implements re-startable file transfers</li>
+<li><strong>Out-of-band transport</strong>: The technique by which data is carried outside the network connection. For example, one might send data across TCP/IP and then switch to using shared memory if one is talking to a peer on the same system</li>
+<li><strong>Zero copy</strong>: The technique of transferring data without copying it to or from intermediate buffers. Zero copy requires that the protocol allows the out-of-band transfer of data as opaque blocks, as AMQP does</li>
+<li><strong>Assertion</strong>: A condition that must be true for processing to continue</li>
+<li><strong>Exception</strong>: A failed assertion, handled by closing either the Channel or the Connection</li>
+<li><strong>Topic:</strong> Usually a means of distributing messages; AMQP implements topics using one or more types of exchange</li>
+<li><strong>Subscription</strong>: Usually a request to receive data from topics; AMQP implements subscriptions as message queues and bindings</li>
+<li><strong>Service</strong>: Usually synonymous with server. The AMQP standard uses “server” to conform with IETF standard nomenclature and to clarify the roles of each party in the protocol (both sides may be AMQP services)</li>
+<li><strong>Broker</strong>: synonymous with server. The AMQP standard uses the terms “client” and “server” to conform with IETF standard nomenclature.</li>
+<li><strong>Router</strong>: Sometimes used to describe the actions of an exchange. However exchanges can do more than message routing (they can also act as message end-points), and the term “router” has special significance in the network domain, so AMQP avoids using it.</li>
+</ul>
+<h3 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h3><h4 id="AMQP-Model"><a href="#AMQP-Model" class="headerlink" title="AMQP Model"></a>AMQP Model</h4><h5 id="Channels"><a href="#Channels" class="headerlink" title="Channels"></a>Channels</h5><p>Channels are something like sessions.</p>
+<h5 id="Exchange"><a href="#Exchange" class="headerlink" title="Exchange"></a>Exchange</h5><p>Where messages been put by producers.<br>Receives mesages from publishers and routes them to “message queue”, based on arbitrary criteria, usually message properties or content.</p>
+<hr>
+<p><strong>Exchange Types</strong></p>
+<h6 id="Direct"><a href="#Direct" class="headerlink" title="Direct"></a>Direct</h6><p>Only one bound queue will see a given message. (Pool of workers)</p>
+<h6 id="Fanout"><a href="#Fanout" class="headerlink" title="Fanout"></a>Fanout</h6><p>Every bound queues will see the same messages. (Pub/Sub)</p>
+<h6 id="Topic"><a href="#Topic" class="headerlink" title="Topic"></a>Topic</h6><p>Fanout + routing keys support (filtering)</p>
+<hr>
+<h5 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a>Message Queue</h5><p>Where messages been read by receviers.<br>Stores messages until they can be safely processed by consumer(s).</p>
+<h5 id="Binding"><a href="#Binding" class="headerlink" title="Binding"></a>Binding</h5><p>How the messages been routed from Exchanges to Queues.<br>Defines the relationship between a message queue and an exchange, and provides the message routing criteeria.</p>
+<h3 id="NPM-libs"><a href="#NPM-libs" class="headerlink" title="NPM libs"></a>NPM libs</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">Lib</th>
+<th style="text-align:center">Exchanges, Queues</th>
+<th style="text-align:center">Channels</th>
+<th style="text-align:center">Bindings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">node-amqp</td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-remove"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+</tr>
+<tr>
+<td style="text-align:center">amqplib</td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+</tr>
+<tr>
+<td style="text-align:center">rabbit.js</td>
+<td style="text-align:center"><i class="glyphicon glyphicon-remove"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-remove"></i></td>
+<td style="text-align:center"><i class="glyphicon glyphicon-ok"></i></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a>Logstash</h3><h4 id="Output-logstash-gt-mq"><a href="#Output-logstash-gt-mq" class="headerlink" title="Output (logstash -&gt; mq)"></a>Output (logstash -&gt; mq)</h4><blockquote>
+<p>exchange: “was”<br>exchange_type: “fanout” # one of [“fanout”, “direct”, “topic”]<br>key: “logstash”</p>
+</blockquote>
+<h4 id="Input-mq-gt-logstash"><a href="#Input-mq-gt-logstash" class="headerlink" title="Input (mq -&gt; logstash)"></a>Input (mq -&gt; logstash)</h4><blockquote>
+<p>arguments: {}<br>auto_delete: false<br>exchange: “was”<br>exclusive: false<br>key: “logstash”<br>passive: false<br>queue: “”</p>
+</blockquote>
+<h3 id="Some-links"><a href="#Some-links" class="headerlink" title="Some links"></a>Some links</h3><ul>
+<li><a href="https://www.amqp.org/" target="_blank" rel="external">https://www.amqp.org/</a></li>
+</ul>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/05/24/amqp/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

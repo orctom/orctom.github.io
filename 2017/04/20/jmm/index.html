@@ -1,0 +1,207 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="Areas
+Shared Amoung ThreadsMethod AreaIt stores following information, which are loaded by classloaders.
+
+class information
+the bytecode of constructo">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Java Memory Model | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/04/20/jmm/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>Java Memory Model</h1>
+        
+        <div class="time-info">
+<time datetime="2017-04-20T04:43:13.000Z" itemprop="datePublished">Apr 20, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Areas"><span class="toc-number">1.</span> <span class="toc-text">Areas</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Shared-Amoung-Threads"><span class="toc-number">1.1.</span> <span class="toc-text">Shared Amoung Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Method-Area"><span class="toc-number">1.1.1.</span> <span class="toc-text">Method Area</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Constant-Pool"><span class="toc-number">1.1.2.</span> <span class="toc-text">Constant Pool</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Heap"><span class="toc-number">1.1.3.</span> <span class="toc-text">Heap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Direct-Native-Memory"><span class="toc-number">1.1.4.</span> <span class="toc-text">Direct Native Memory</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Not-Shared-Amoung-Threads"><span class="toc-number">1.2.</span> <span class="toc-text">Not Shared Amoung Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Stack"><span class="toc-number">1.2.1.</span> <span class="toc-text">Stack</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Native-Method-Stack"><span class="toc-number">1.2.2.</span> <span class="toc-text">Native Method Stack</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Program-Counter-Register"><span class="toc-number">1.2.3.</span> <span class="toc-text">Program Counter Register</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reorderings"><span class="toc-number">2.</span> <span class="toc-text">Reorderings</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Lock-and-Unlock"><span class="toc-number">2.1.</span> <span class="toc-text">Lock and Unlock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Volatiles-and-Monitors"><span class="toc-number">2.2.</span> <span class="toc-text">Volatiles and Monitors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Final-Fields"><span class="toc-number">2.3.</span> <span class="toc-text">Final Fields</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#See-Also"><span class="toc-number">3.</span> <span class="toc-text">See Also</span></a></li></ol>
+            </div>
+            
+            <h2 id="Areas"><a href="#Areas" class="headerlink" title="Areas"></a>Areas</h2><p><img src="http://i.imgur.com/KAvH1Rv.png" alt="memory model"></p>
+<h3 id="Shared-Amoung-Threads"><a href="#Shared-Amoung-Threads" class="headerlink" title="Shared Amoung Threads"></a>Shared Amoung Threads</h3><h4 id="Method-Area"><a href="#Method-Area" class="headerlink" title="Method Area"></a>Method Area</h4><p>It stores following information, which are loaded by classloaders.</p>
+<ul>
+<li>class information</li>
+<li>the bytecode of constructors and methods</li>
+<li>a runtime constant pool per classloader</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>JDK</th>
+<th>Method Area</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle JDK &lt; 8</td>
+<td>PermGen</td>
+</tr>
+<tr>
+<td>Oracle JDK &gt;= 8</td>
+<td>MetaSpace</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Constant-Pool"><a href="#Constant-Pool" class="headerlink" title="Constant Pool"></a>Constant Pool</h4><p>A subpart of Method Area.</p>
+<p>When a class, method or field is referred to, the JVM searches the actual address in the memory by using the runtime constant pool. It also contains constant values like <code>string litterals</code> or <code>constant primitives</code>.</p>
+<h4 id="Heap"><a href="#Heap" class="headerlink" title="Heap"></a>Heap</h4><p>All class instances and arrays are allocated in the Heap.</p>
+<h4 id="Direct-Native-Memory"><a href="#Direct-Native-Memory" class="headerlink" title="Direct Native Memory"></a>Direct Native Memory</h4><p>Can be allocated by <code>DirectByteBuffer</code>.</p>
+<p>Direct Native Memory is allocated out side of Heap, while contains similar data as Heap, but you have to release the memory manually, since no GC for Direct Native Memory.</p>
+<p>It’s been employed to reduce the copying between native memory and Heap. </p>
+<h3 id="Not-Shared-Amoung-Threads"><a href="#Not-Shared-Amoung-Threads" class="headerlink" title="Not Shared Amoung Threads"></a>Not Shared Amoung Threads</h3><h4 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h4><p>Stack stores multiplies Frames, where a frame is a data structure that contains multiplies data that represents the state of the thread of <strong>current method</strong>.</p>
+<h4 id="Native-Method-Stack"><a href="#Native-Method-Stack" class="headerlink" title="Native Method Stack"></a>Native Method Stack</h4><p>Stack for native methods, which is controlled by underlying OS.</p>
+<h4 id="Program-Counter-Register"><a href="#Program-Counter-Register" class="headerlink" title="Program Counter Register"></a>Program Counter Register</h4><p>Each thread has its own PC Register, which is created the same time along with the thread.</p>
+<p>It contains the JVM instruction (in Method Area) currently being executed.</p>
+<h2 id="Reorderings"><a href="#Reorderings" class="headerlink" title="Reorderings"></a>Reorderings</h2><p>Reordering happens due to the out-of-order executions in CPUs and compilers, while JMM consists of the following rules to disallow reorderings.</p>
+<h3 id="Lock-and-Unlock"><a href="#Lock-and-Unlock" class="headerlink" title="Lock and Unlock"></a>Lock and Unlock</h3><p>Including synchronized methods or blocks, </p>
+<h3 id="Volatiles-and-Monitors"><a href="#Volatiles-and-Monitors" class="headerlink" title="Volatiles and Monitors"></a>Volatiles and Monitors</h3><pre>
+  <table>
+    <tr>
+      <td align="center"><b>Can Reorder</b></td>
+      <td colspan="3" rowspan="1" align="center"><em>2nd operation</em></td>
+    </tr>
+    <tr>
+      <td><em>1st operation</em></td>
+      <td>Normal Load / Normal Store</td>
+      <td>Volatile Load / MonitorEnter</td>
+      <td>Volatile Store / MonitorExit</td>
+    </tr>
+    <tr>
+      <td>Normal Load / Normal Store</td>
+      <td></td>
+      <td></td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Volatile Load / MonitorEnter</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Volatile store / MonitorExit</td>
+      <td></td>
+      <td>No</td>
+      <td>No</td>
+    </tr> 
+  </table>
+</pre>
+
+<p>Where:</p>
+<ul>
+<li>Normal Loads are getfield, getstatic, array load of non-volatile fields.</li>
+<li>Normal Stores are putfield, putstatic, array store of non-volatile fields</li>
+<li>Volatile Loads are getfield, getstatic of volatile fields that are accessible by multiple threads</li>
+<li>Volatile Stores are putfield, putstatic of volatile fields that are accessible by multiple threads</li>
+<li>MonitorEnters (including entry to synchronized methods) are for lock objects accessible by multiple threads.</li>
+<li>MonitorExits (including exit from synchronized methods) are for lock objects accessible by multiple threads.</li>
+</ul>
+<h3 id="Final-Fields"><a href="#Final-Fields" class="headerlink" title="Final Fields"></a>Final Fields</h3><p>The initialization of final fields in constructor are guarenteed to <code>happends-before</code> exiting the constructor.</p>
+<h2 id="See-Also"><a href="#See-Also" class="headerlink" title="See Also"></a>See Also</h2><ul>
+<li><a href="http://g.oswego.edu/dl/jmm/cookbook.html" target="_blank" rel="external">http://g.oswego.edu/dl/jmm/cookbook.html</a></li>
+</ul>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/04/20/jmm/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

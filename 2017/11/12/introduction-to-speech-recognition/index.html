@@ -1,0 +1,239 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="Overview
+Decoding123456789101112131415161718192021222324252627282930313233343536373839┌─────────┐                           │  wave   │               ">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Introduction to Speech Recognition | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/11/12/introduction-to-speech-recognition/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>Introduction to Speech Recognition</h1>
+        
+        <div class="time-info">
+<time datetime="2017-11-12T13:35:25.464Z" itemprop="datePublished">Nov 12, 2017</time> (updated: <time datetime="2017-11-15T06:28:21.277Z" itemprop="dateModified">Nov 15, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Overview"><span class="toc-number">1.</span> <span class="toc-text">Overview</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Decoding"><span class="toc-number">1.1.</span> <span class="toc-text">Decoding</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Speech-Capture"><span class="toc-number">1.1.1.</span> <span class="toc-text">Speech Capture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pre-processing"><span class="toc-number">1.1.2.</span> <span class="toc-text">Pre-processing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Acoustic-Model"><span class="toc-number">1.1.3.</span> <span class="toc-text">Acoustic Model</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GMM-HMM"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">GMM + HMM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tri-phoneme-model"><span class="toc-number">1.1.3.2.</span> <span class="toc-text">tri-phoneme model</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lexicon-Pronunciation-Model"><span class="toc-number">1.1.4.</span> <span class="toc-text">Lexicon (Pronunciation Model)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Language-Model"><span class="toc-number">1.1.5.</span> <span class="toc-text">Language Model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Decoder"><span class="toc-number">1.1.6.</span> <span class="toc-text">Decoder</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Training"><span class="toc-number">1.2.</span> <span class="toc-text">Training</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Models"><span class="toc-number">1.3.</span> <span class="toc-text">Models</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GMM"><span class="toc-number">1.3.1.</span> <span class="toc-text">GMM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HMM"><span class="toc-number">1.3.2.</span> <span class="toc-text">HMM</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Viterbi"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">Viterbi</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Summerize"><span class="toc-number">1.4.</span> <span class="toc-text">Summerize</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Fumular"><span class="toc-number">1.4.1.</span> <span class="toc-text">Fumular</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Other-Approaches"><span class="toc-number">1.5.</span> <span class="toc-text">Other Approaches</span></a></li></ol></li></ol>
+            </div>
+            
+            <h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p><img src="http://www.authot.com/wp-content/uploads/2016/09/article4-automatic-speech-recognition-system-asr-architecture-authot.png" alt="Overview"></p>
+<h2 id="Decoding"><a href="#Decoding" class="headerlink" title="Decoding"></a>Decoding</h2><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">┌─────────┐                           </div><div class="line">│  wave   │                           </div><div class="line">│         │                           </div><div class="line">└─────────┘                           </div><div class="line">     │                                </div><div class="line">     │   MFCC / PLP / XX_PLP ...      </div><div class="line">     ▼                                </div><div class="line">┌─────────┐                           </div><div class="line">│ Feature │                           </div><div class="line">│ <span class="keyword">Vectors</span> │                           </div><div class="line">└─────────┘                           </div><div class="line">     │                                </div><div class="line">     │   Acoustic Model (GMM / DNN)   </div><div class="line">     ▼                                </div><div class="line">┌─────────┐                           </div><div class="line">│ Phoneme │                           </div><div class="line">│  State  │                           </div><div class="line">└─────────┘                           </div><div class="line">     │                                </div><div class="line">     │   Acoustic Model (HMM)         </div><div class="line">     ▼                                </div><div class="line">┌─────────┐                           </div><div class="line">│ Phoneme │                           </div><div class="line">│         │                           </div><div class="line">└─────────┘                           </div><div class="line">     │                                </div><div class="line">     │   Lexicon                      </div><div class="line">     ▼                                </div><div class="line">┌─────────┐                           </div><div class="line">│  <span class="keyword">Word</span>   │                           </div><div class="line">│         │                           </div><div class="line">└─────────┘                           </div><div class="line">     │                                </div><div class="line">     │   <span class="keyword">Language</span> Model               </div><div class="line">     ▼                                </div><div class="line">┌─────────┐                           </div><div class="line">│  <span class="keyword">Text</span>   │                           </div><div class="line">│         │                           </div><div class="line">└─────────┘</div></pre></td></tr></table></figure>
+<h3 id="Speech-Capture"><a href="#Speech-Capture" class="headerlink" title="Speech Capture"></a>Speech Capture</h3><ul>
+<li>Wave</li>
+<li>Mono</li>
+<li>VAD (noise)</li>
+</ul>
+<h3 id="Pre-processing"><a href="#Pre-processing" class="headerlink" title="Pre-processing"></a>Pre-processing</h3><ul>
+<li>Short-time analysis: process the data window by window, as human voices have a duration of consistency within the range of 20ms to 50ms, generally we take 25ms. And make the step size of 10ms.</li>
+<li>FFT: converting raw wave data to frequency data.</li>
+<li>Cut: keep only a range of frequency data, that most human voices cover.</li>
+<li>Other… (DCT)</li>
+<li>Feature Extraction<ul>
+<li>MFCC (mel-frequency cepstral coefficient), 39 dimentions</li>
+<li>PLP (perceptual linear prediction), 42 dimentions</li>
+</ul>
+</li>
+</ul>
+<p>Production-based Analysis</p>
+<ul>
+<li>Spectral Envelope</li>
+<li>Cepstral Analysis</li>
+<li>Linear Predictive Analysis</li>
+</ul>
+<p>Perception-based Analysis</p>
+<ul>
+<li>Mel-Frequency Cepstrum Coefficients</li>
+<li>Perceptual Linear Prediction</li>
+</ul>
+<h3 id="Acoustic-Model"><a href="#Acoustic-Model" class="headerlink" title="Acoustic Model"></a>Acoustic Model</h3><ul>
+<li>Acoustic model is a classification model, who’s input is the fetures, MFCC/PLP…, while output is the <code>phoneme</code>s, about 70 most frequently used.</li>
+<li>Unsupervised learning</li>
+<li>GMM + HMM / HMM + LSTM</li>
+<li>Baum-Welch(EM) / MLE</li>
+</ul>
+<h4 id="GMM-HMM"><a href="#GMM-HMM" class="headerlink" title="GMM + HMM"></a>GMM + HMM</h4><p>HMM: modeling the states of phonemes.<br>GMM: modeling the output probabilities.</p>
+<h4 id="tri-phoneme-model"><a href="#tri-phoneme-model" class="headerlink" title="tri-phoneme model"></a>tri-phoneme model</h4><p>Each phoneme in different context, may pronounce differently.<br>So setup a </p>
+<h3 id="Lexicon-Pronunciation-Model"><a href="#Lexicon-Pronunciation-Model" class="headerlink" title="Lexicon (Pronunciation Model)"></a>Lexicon (Pronunciation Model)</h3><p>words -&gt; pronunciation in terms of phones</p>
+<h3 id="Language-Model"><a href="#Language-Model" class="headerlink" title="Language Model"></a>Language Model</h3><p>For modeling the structure of sentences.<br>Making the sequence of words more like a human speech.</p>
+<ul>
+<li>N-gram</li>
+<li>WFST(Weighted Finite State Transducer)</li>
+</ul>
+<h3 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder"></a>Decoder</h3><p>Viterbi    algorithm: dynamic programming for combining all these to get word sequence from speech</p>
+<h2 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h2><ul>
+<li>Labels marked (hand-crafted)</li>
+<li>Acoustic model (EM)<br>Gaussians    for    computing P(X|Q)</li>
+<li>Laxicon (hand-crafted)<br>HMM: what phones can follow each other</li>
+<li>Language model (n-gram, RNN)</li>
+</ul>
+<h2 id="Models"><a href="#Models" class="headerlink" title="Models"></a>Models</h2><h3 id="GMM"><a href="#GMM" class="headerlink" title="GMM"></a>GMM</h3><h3 id="HMM"><a href="#HMM" class="headerlink" title="HMM"></a>HMM</h3><p>$$ \lambda = (\pi, A, B) $$</p>
+<ul>
+<li>Pi: initial state probabilities matrix</li>
+<li>A: hidden states transition probabilities matrix</li>
+<li>B: output probabilities matrix (Confusion Matrix)</li>
+<li>S: Hidden States</li>
+<li>O: Observations</li>
+</ul>
+<p>Problem &amp; Solution</p>
+<ul>
+<li>Evaluation: given the observations and lamdas, find the pobability of the observation sequence - <code>Forword algrithm</code></li>
+<li>Decoding: given the observations and lamda, find out hidden stats - <code>Viterbi algorithm</code></li>
+<li>Learning: given the observations and learn the lamda - <code>Baum-Welch</code> (forward-backward algorithm)</li>
+</ul>
+<h4 id="Viterbi"><a href="#Viterbi" class="headerlink" title="Viterbi"></a>Viterbi</h4><p>Forced alignment.<br><img src="https://upload.wikimedia.org/wikipedia/commons/7/73/Viterbi_animated_demo.gif" alt="Viterbi animated demo"></p>
+<h2 id="Summerize"><a href="#Summerize" class="headerlink" title="Summerize"></a>Summerize</h2><h3 id="Fumular"><a href="#Fumular" class="headerlink" title="Fumular"></a>Fumular</h3><ul>
+<li>X: acoustic feature vectors (observations)</li>
+<li>W: a word sequence</li>
+<li>Q: model parameters</li>
+</ul>
+<p>Find the most probable word sequence Wˆ = w1,w2, . . . ,wM<br>given the acoustic observations X = x1, x2, . . . , xn:<br>$$ W^* = argmax_{w}P(W|X) $$</p>
+<p>Applying Bayes’ Theorem:<br>$$ W^* = argmax_{w}\frac{P(X|W)P(W)}{P(X)} $$</p>
+<p>P(X) is irrelevant:<br>$$ W^* = argmax_{w}P(X|W)P(W) $$</p>
+<p>Words are composed of state sequences so we may express<br>this criterion by summing over all state sequences<br>Q = q1, q2, . . . , qn:<br>$$ W^* = argmax_{w}P(W)\sum_Q{P(Q|W)P(X|Q)} $$</p>
+<h2 id="Other-Approaches"><a href="#Other-Approaches" class="headerlink" title="Other Approaches"></a>Other Approaches</h2><ul>
+<li>HMM + GMM -&gt; HMM + DNN + GMM(frame alignment only)</li>
+<li>HMM + DNN -&gt; RNN</li>
+<li>end 2 end: RNN + CTC (Connectionist Temporal Classification)</li>
+</ul>
+
+
+			
+			<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            preferredFont: "TeX",
+            availableFonts: ["STIX", "TeX"],
+            linebreaks: {
+                automatic: true
+            },
+            EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50),
+            scale: 120
+        },
+        tex2jax: {
+            inlineMath: [
+                ["$", "$"],
+                ["\\(", "\\)"]
+            ],
+            processEscapes: true,
+            ignoreClass: "tex2jax_ignore|dno",
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        },
+        TeX: {
+            Macros: {
+                href: "{}"
+            }
+        },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/11/12/introduction-to-speech-recognition/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

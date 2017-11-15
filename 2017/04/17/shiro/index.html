@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="IndroductionShiro is an easy-to-use Java security framework, that works both on web and standalone applications.
+
+Features
+Highlights
+Multi realms sup">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shiro | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/04/17/shiro/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>Shiro</h1>
+        
+        <div class="time-info">
+<time datetime="2017-04-17T08:06:13.000Z" itemprop="datePublished">Apr 17, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Indroduction"><span class="toc-number">1.</span> <span class="toc-text">Indroduction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Features"><span class="toc-number">1.1.</span> <span class="toc-text">Features</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Highlights"><span class="toc-number">1.2.</span> <span class="toc-text">Highlights</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Components"><span class="toc-number">2.</span> <span class="toc-text">Components</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Subject"><span class="toc-number">2.1.</span> <span class="toc-text">Subject</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SecurityManager"><span class="toc-number">2.2.</span> <span class="toc-text">SecurityManager</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SessionManager"><span class="toc-number">2.3.</span> <span class="toc-text">SessionManager</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Realm"><span class="toc-number">2.4.</span> <span class="toc-text">Realm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Authenticator"><span class="toc-number">2.5.</span> <span class="toc-text">Authenticator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Authorizer"><span class="toc-number">2.6.</span> <span class="toc-text">Authorizer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CacheManager"><span class="toc-number">2.7.</span> <span class="toc-text">CacheManager</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SubjectDAO"><span class="toc-number">2.8.</span> <span class="toc-text">SubjectDAO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CredentialsMatcher"><span class="toc-number">2.9.</span> <span class="toc-text">CredentialsMatcher</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Filter"><span class="toc-number">2.10.</span> <span class="toc-text">Filter</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Configuration"><span class="toc-number">3.</span> <span class="toc-text">Configuration</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ini"><span class="toc-number">3.1.</span> <span class="toc-text">ini</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Links"><span class="toc-number">4.</span> <span class="toc-text">Links</span></a></li></ol>
+            </div>
+            
+            <h2 id="Indroduction"><a href="#Indroduction" class="headerlink" title="Indroduction"></a>Indroduction</h2><p>Shiro is an easy-to-use Java security framework, that works both on web and standalone applications.</p>
+<p><img src="https://shiro.apache.org/assets/images/ShiroArchitecture.png" alt="Shiro Archecture"></p>
+<h3 id="Features"><a href="#Features" class="headerlink" title="Features"></a>Features</h3><p><img src="http://shiro.apache.org/assets/images/ShiroFeatures.png" alt="Shiro Features"></p>
+<h3 id="Highlights"><a href="#Highlights" class="headerlink" title="Highlights"></a>Highlights</h3><ul>
+<li>Multi <code>realm</code>s support.</li>
+<li>Pluggable data storage. (<code>realm</code>, <code>session</code>)</li>
+<li>Cryptography.</li>
+<li>SSO support.</li>
+<li>Web friendly. (URL-specific filter chains)</li>
+<li>OAuth, CAS, SAML, OpenID Connect, LDAP, JWT… support. <a href="http://www.pac4j.org/" target="_blank" rel="external">pac4j</a></li>
+<li>Popular web framework support: Spring MVC, Play!, Lift, Wicket, Dropwizard</li>
+</ul>
+<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><h3 id="Subject"><a href="#Subject" class="headerlink" title="Subject"></a>Subject</h3><p>The current executing user.</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Subject currentUser</span> = SecurityUtils.getSubject();</div></pre></td></tr></table></figure>
+<p>Almost the only object you would cope with in your application.</p>
+<h3 id="SecurityManager"><a href="#SecurityManager" class="headerlink" title="SecurityManager"></a>SecurityManager</h3><p>The heart of shiro architecture, who does the haavy lifting for <code>Subject</code> behind the scenes.</p>
+<h3 id="SessionManager"><a href="#SessionManager" class="headerlink" title="SessionManager"></a>SessionManager</h3><p>Manages creation, maintainance, clean-up of sessions.</p>
+<h3 id="Realm"><a href="#Realm" class="headerlink" title="Realm"></a>Realm</h3><p>Storages for users, roles, permissions. </p>
+<p>A Realm is essentially a security-specific DAO.</p>
+<h3 id="Authenticator"><a href="#Authenticator" class="headerlink" title="Authenticator"></a>Authenticator</h3><p>Processing the <code>login</code> logic.</p>
+<h3 id="Authorizer"><a href="#Authorizer" class="headerlink" title="Authorizer"></a>Authorizer</h3><p>Performs authorization operations on any given <code>Subject</code> (a.k.a. user).</p>
+<h3 id="CacheManager"><a href="#CacheManager" class="headerlink" title="CacheManager"></a>CacheManager</h3><p>Maintains the lifecycle of cache instances, it is a wrapper of the popular cache provider, such as EhCache, JCS …</p>
+<h3 id="SubjectDAO"><a href="#SubjectDAO" class="headerlink" title="SubjectDAO"></a>SubjectDAO</h3><ul>
+<li>create (org.apache.shiro.session.Session)</li>
+<li>readSession (java.io.Serializable)</li>
+<li>update (org.apache.shiro.session.Session)</li>
+<li>delete (org.apache.shiro.session.Session)</li>
+</ul>
+<h3 id="CredentialsMatcher"><a href="#CredentialsMatcher" class="headerlink" title="CredentialsMatcher"></a>CredentialsMatcher</h3><p>Determines if an <code>AuthenticationToken</code>‘s provided credentials matches a corresponding account’s credentials stored n the <code>realm</code>(s).</p>
+<h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><table>
+<thead>
+<tr>
+<th>Filter Name</th>
+<th>Class</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>anon</td>
+<td>AnonymousFilter</td>
+<td>no security check</td>
+</tr>
+<tr>
+<td>authc</td>
+<td>FormAuthenticationFilter</td>
+<td>do login or redirect  to loginUrl</td>
+</tr>
+<tr>
+<td>logout</td>
+<td>LogoutFilter</td>
+<td>do logout</td>
+</tr>
+<tr>
+<td>noSessionCreation</td>
+<td>NoSessionCreationFilter</td>
+<td>making <code>subject.getSession(true)</code> throws exception</td>
+</tr>
+<tr>
+<td>perms</td>
+<td>PermissionsAuthorizationFilter</td>
+<td>permission specific check</td>
+</tr>
+<tr>
+<td>port</td>
+<td>PortFilter</td>
+<td>accept request only on that port, default <code>80</code></td>
+</tr>
+<tr>
+<td>rest</td>
+<td>HttpMethodPermissionFilter</td>
+<td>/user/** = rest[user] -&gt; <code>Subject.isPermitted(&quot;user:read&quot;)</code></td>
+</tr>
+<tr>
+<td>roles</td>
+<td>RolesAuthorizationFilter</td>
+<td>denies access if the user has none of the roles specified</td>
+</tr>
+<tr>
+<td>ssl</td>
+<td>SslFilter</td>
+<td>denies access if the schema is not https</td>
+</tr>
+<tr>
+<td>user</td>
+<td>UserFilter</td>
+<td>requires authenticated or remembered</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h2><h3 id="ini"><a href="#ini" class="headerlink" title="ini"></a>ini</h3><p>Sample shiro.ini<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">[main]</div><div class="line">authc.<span class="attr">loginUrl</span> = /login.jsp //①</div><div class="line">authc.<span class="attr">successUrl</span> = /home.jsp</div><div class="line"></div><div class="line"><span class="attr">passwordMatcher</span> = org.apache.shiro.authc.credential.TempFixPasswordMatcher //②</div><div class="line"><span class="attr">passwordService</span> = org.apache.shiro.authc.credential.DefaultPasswordService</div><div class="line">passwordMatcher.<span class="attr">passwordService</span> = $passwordService</div><div class="line"></div><div class="line"><span class="attr">ds</span> = com.jolbox.bonecp.BoneCPDataSource //③</div><div class="line">ds.<span class="attr">driverClass=com.mysql.jdbc.Driver</span></div><div class="line">ds.<span class="attr">jdbcUrl=jdbc:mysql://localhost:3306/simple_shiro_web_app</span></div><div class="line">ds.<span class="attr">username</span> = root</div><div class="line">ds.<span class="attr">password</span> = <span class="number">123</span>qwe</div><div class="line"></div><div class="line"><span class="attr">jdbcRealm</span> = org.apache.shiro.realm.jdbc.JdbcRealm //④</div><div class="line">jdbcRealm.<span class="attr">permissionsLookupEnabled</span> = <span class="literal">true</span></div><div class="line">jdbcRealm.<span class="attr">authenticationQuery</span> = SELECT password FROM USERS WHERE <span class="attr">username</span> = ?</div><div class="line">jdbcRealm.<span class="attr">userRolesQuery</span> = SELECT role_name FROM USERS_ROLES WHERE <span class="attr">username</span> = ?</div><div class="line">jdbcRealm.<span class="attr">permissionsQuery</span> = SELECT permission_name FROM ROLES_PERMISSIONS WHERE</div><div class="line"><span class="attr">role_name</span> = ?</div><div class="line">jdbcRealm.<span class="attr">credentialsMatcher</span> = $passwordMatcher</div><div class="line">jdbcRealm.<span class="attr">dataSource=$ds</span></div><div class="line">securityManager.<span class="attr">realms</span> = $jdbcRealm //⑤</div><div class="line"></div><div class="line">//⑥</div><div class="line">[urls]</div><div class="line"><span class="comment"># The /login.jsp is not restricted to authenticated users (otherwise no one could log in!), </span></div><div class="line"><span class="comment"># but the 'authc' filter must still be specified for it so it can process that url's login submissions. </span></div><div class="line"><span class="comment"># It is 'smart' enough to allow those requests through as specified by the shiro.loginUrl above.</span></div><div class="line">/login.<span class="attr">jsp</span> = authc</div><div class="line">/home.<span class="attr">jsp</span> = anon, authc</div><div class="line">/<span class="attr">logout</span> = logout</div><div class="line">/account<span class="comment">/** = authc</span></div></pre></td></tr></table></figure></p>
+<p>① Configuration for the authc authentication filer.<br>② Configuration for the passwordMatcher and passwordService, which are components for<br>password verification and matching.<br>③ The definition of the Datasource in this example is a JDBC DataSource.<br>④ Configuration for the Realm in this example is a JDBC Realm.<br>⑤ This assigns the configured Realm to the Siro SecurityManager.<br>⑥ This assigns URL patterns to the appropriate filters.</p>
+<h2 id="Links"><a href="#Links" class="headerlink" title="Links"></a>Links</h2><ul>
+<li><a href="http://shiro.apache.org" target="_blank" rel="external">http://shiro.apache.org</a></li>
+<li><a href="https://www.infoq.com/minibooks/apache-shiro-ee-7" target="_blank" rel="external">https://www.infoq.com/minibooks/apache-shiro-ee-7</a></li>
+</ul>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/04/17/shiro/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

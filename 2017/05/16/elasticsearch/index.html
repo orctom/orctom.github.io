@@ -1,0 +1,603 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="TermsMappinghttps://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html
+
+
+
+type
+description
+
+
+
+
+text
+Analyzed to lists of terms">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Elasticsearch | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/05/16/elasticsearch/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>Elasticsearch</h1>
+        
+        <div class="time-info">
+<time datetime="2017-05-16T15:42:02.000Z" itemprop="datePublished">May 16, 2017</time> (updated: <time datetime="2017-08-15T07:40:24.000Z" itemprop="dateModified">Aug 15, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Terms"><span class="toc-number">1.</span> <span class="toc-text">Terms</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mapping"><span class="toc-number">1.1.</span> <span class="toc-text">Mapping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Analysis"><span class="toc-number">1.2.</span> <span class="toc-text">Analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Analyzer"><span class="toc-number">1.2.1.</span> <span class="toc-text">Analyzer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Tokenizer"><span class="toc-number">1.2.2.</span> <span class="toc-text">Tokenizer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Token-Filter"><span class="toc-number">1.2.3.</span> <span class="toc-text">Token Filter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Character-Filter"><span class="toc-number">1.2.4.</span> <span class="toc-text">Character Filter</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Query"><span class="toc-number">2.</span> <span class="toc-text">Query</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Query-API"><span class="toc-number">2.1.</span> <span class="toc-text">Query API</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Basic-Query-String"><span class="toc-number">2.1.1.</span> <span class="toc-text">Basic Query String</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Full-Query-API"><span class="toc-number">2.1.2.</span> <span class="toc-text">Full Query API</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Query-Language"><span class="toc-number">2.1.3.</span> <span class="toc-text">Query Language</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Context"><span class="toc-number">2.2.</span> <span class="toc-text">Context</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Query-Cateories"><span class="toc-number">2.3.</span> <span class="toc-text">Query Cateories</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Query-Types"><span class="toc-number">2.4.</span> <span class="toc-text">Query Types</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Match-All-Query"><span class="toc-number">2.4.1.</span> <span class="toc-text">Match All Query</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Full-Text-Queries"><span class="toc-number">2.4.2.</span> <span class="toc-text">Full Text Queries</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Match-Query"><span class="toc-number">2.4.2.1.</span> <span class="toc-text">Match Query</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#boolean-default"><span class="toc-number">2.4.2.1.1.</span> <span class="toc-text">boolean (default)</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#phrase"><span class="toc-number">2.4.2.1.2.</span> <span class="toc-text">phrase</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#phrase-prefix"><span class="toc-number">2.4.2.1.3.</span> <span class="toc-text">phrase_prefix</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Multi-match-Query"><span class="toc-number">2.4.2.2.</span> <span class="toc-text">Multi-match Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Common-terms-Query"><span class="toc-number">2.4.2.3.</span> <span class="toc-text">Common_terms Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Query-String-Query"><span class="toc-number">2.4.2.4.</span> <span class="toc-text">Query String Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Simple-Query-String-Query"><span class="toc-number">2.4.2.5.</span> <span class="toc-text">Simple Query String Query</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Term-Level-Queries"><span class="toc-number">2.4.3.</span> <span class="toc-text">Term Level Queries</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Term-Query"><span class="toc-number">2.4.3.1.</span> <span class="toc-text">Term Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Terms-Query"><span class="toc-number">2.4.3.2.</span> <span class="toc-text">Terms Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Range-Query"><span class="toc-number">2.4.3.3.</span> <span class="toc-text">Range Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Exists-Query"><span class="toc-number">2.4.3.4.</span> <span class="toc-text">Exists Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Missing-Query"><span class="toc-number">2.4.3.5.</span> <span class="toc-text">Missing Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Prefix-Query"><span class="toc-number">2.4.3.6.</span> <span class="toc-text">Prefix Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Wildcard-Query"><span class="toc-number">2.4.3.7.</span> <span class="toc-text">Wildcard Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Regexp-Query"><span class="toc-number">2.4.3.8.</span> <span class="toc-text">Regexp Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Fuzzy-Query"><span class="toc-number">2.4.3.9.</span> <span class="toc-text">Fuzzy Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Type-Query"><span class="toc-number">2.4.3.10.</span> <span class="toc-text">Type Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#IDs-Query"><span class="toc-number">2.4.3.11.</span> <span class="toc-text">IDs Query</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Compound-Queries"><span class="toc-number">2.4.4.</span> <span class="toc-text">Compound Queries</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Constant-Score-query"><span class="toc-number">2.4.4.1.</span> <span class="toc-text">Constant Score query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Bool-Query"><span class="toc-number">2.4.4.2.</span> <span class="toc-text">Bool Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Dis-Max-Query"><span class="toc-number">2.4.4.3.</span> <span class="toc-text">Dis Max Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Function-Score-Query"><span class="toc-number">2.4.4.4.</span> <span class="toc-text">Function Score Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Boosting-Query"><span class="toc-number">2.4.4.5.</span> <span class="toc-text">Boosting Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Indices-Query"><span class="toc-number">2.4.4.6.</span> <span class="toc-text">Indices Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Limit-Query"><span class="toc-number">2.4.4.7.</span> <span class="toc-text">Limit Query</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Joining-Queries"><span class="toc-number">2.4.5.</span> <span class="toc-text">Joining Queries</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Nested-Query"><span class="toc-number">2.4.5.1.</span> <span class="toc-text">Nested Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Has-Child-Query"><span class="toc-number">2.4.5.2.</span> <span class="toc-text">Has Child Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Has-Parent-Query"><span class="toc-number">2.4.5.3.</span> <span class="toc-text">Has Parent Query</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Geo-Queries"><span class="toc-number">2.4.6.</span> <span class="toc-text">Geo Queries</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#GeoShape-Query"><span class="toc-number">2.4.6.1.</span> <span class="toc-text">GeoShape Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Geo-Bounding-Box-Query"><span class="toc-number">2.4.6.2.</span> <span class="toc-text">Geo Bounding Box Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Geo-Distance-Queqy"><span class="toc-number">2.4.6.3.</span> <span class="toc-text">Geo Distance Queqy</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Geo-Distance-Range-Query"><span class="toc-number">2.4.6.4.</span> <span class="toc-text">Geo Distance Range Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Geo-Polygon-Query"><span class="toc-number">2.4.6.5.</span> <span class="toc-text">Geo Polygon Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Geohash-Cell-Query"><span class="toc-number">2.4.6.6.</span> <span class="toc-text">Geohash Cell Query</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Specialized-Queries"><span class="toc-number">2.4.7.</span> <span class="toc-text">Specialized Queries</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#More-Like-This-Query"><span class="toc-number">2.4.7.1.</span> <span class="toc-text">More Like This Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Template-Query"><span class="toc-number">2.4.7.2.</span> <span class="toc-text">Template Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Script-Query"><span class="toc-number">2.4.7.3.</span> <span class="toc-text">Script Query</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Span-Query"><span class="toc-number">2.4.8.</span> <span class="toc-text">Span Query</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Span-Term-Query"><span class="toc-number">2.4.8.1.</span> <span class="toc-text">Span Term Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Span-Multi-Term-Query"><span class="toc-number">2.4.8.2.</span> <span class="toc-text">Span Multi Term Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Span-First-Query"><span class="toc-number">2.4.8.3.</span> <span class="toc-text">Span First Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Span-Near-Query"><span class="toc-number">2.4.8.4.</span> <span class="toc-text">Span Near Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Span-Or-Query"><span class="toc-number">2.4.8.5.</span> <span class="toc-text">Span Or Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Span-Not-Query"><span class="toc-number">2.4.8.6.</span> <span class="toc-text">Span Not Query</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Span-Containing-Query"><span class="toc-number">2.4.8.7.</span> <span class="toc-text">Span Containing Query</span></a></li></ol></li></ol></li></ol></li></ol>
+            </div>
+            
+            <h2 id="Terms"><a href="#Terms" class="headerlink" title="Terms"></a>Terms</h2><h3 id="Mapping"><a href="#Mapping" class="headerlink" title="Mapping"></a>Mapping</h3><p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html" target="_blank" rel="external">https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html</a></p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td><ul><li>Analyzed to lists of terms</li><li>For full-text search</li><li>Not for sorting, aggregation</li></ul></td>
+</tr>
+<tr>
+<td><code>keyword</code></td>
+<td><ul><li>For filtring</li><li>Only searchable by exact value</li></ul></td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>“format”: “yyyy-MM-dd HH:mm:ss</td>
+<td></td>
+<td>yyyy-MM-dd</td>
+<td></td>
+<td>epoch_millis”</td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>binary</code></td>
+<td><ul><li>Not searchable</li><li><code>Base64</code> encoded string</li></ul></td>
+</tr>
+<tr>
+<td><code>long</code></td>
+<td>numeric</td>
+</tr>
+<tr>
+<td><code>integer</code></td>
+<td>numeric</td>
+</tr>
+<tr>
+<td><code>short</code></td>
+<td>numeric</td>
+</tr>
+<tr>
+<td><code>byte</code></td>
+<td>numeric</td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td>numeric</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>numeric</td>
+</tr>
+<tr>
+<td><code>half_float</code></td>
+<td>numeric</td>
+</tr>
+<tr>
+<td><code>scaled_float</code></td>
+<td>numeric</td>
+</tr>
+<tr>
+<td><code>integer_range</code></td>
+<td>range</td>
+</tr>
+<tr>
+<td><code>long_range</code></td>
+<td>range</td>
+</tr>
+<tr>
+<td><code>double_range</code></td>
+<td>range</td>
+</tr>
+<tr>
+<td><code>date_range</code></td>
+<td>range</td>
+</tr>
+<tr>
+<td><code>ip_range</code></td>
+<td>range</td>
+</tr>
+<tr>
+<td><code>geo_point</code></td>
+<td><ul><li>bounding box</li><li>polygon</li></ul></td>
+</tr>
+<tr>
+<td><code>geo_shape</code></td>
+<td>arbitrary geo shapes such as rectangles and polygons</td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td>Supports <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation" target="_blank" rel="external">CIDR_notation</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Analysis"><a href="#Analysis" class="headerlink" title="Analysis"></a>Analysis</h3><p>To register Analyzers, Tokenizers and TokenFilters</p>
+<p>Sample:<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">index :</div><div class="line">  <span class="type">analysis</span> :</div><div class="line">    <span class="type">analyzer</span> :</div><div class="line">      <span class="type">standard</span> :</div><div class="line">        <span class="type">type</span> : <span class="type">standard</span></div><div class="line">        stopwords : [<span class="type">stop1</span>, stop2]</div><div class="line">      myAnalyzer1 :</div><div class="line">        <span class="type">type</span> : <span class="type">standard</span></div><div class="line">        stopwords : [<span class="type">stop1</span>, stop2, stop3]</div><div class="line">        max_token_length : 500</div><div class="line">      # configure a custom analyzer which <span class="keyword">is</span></div><div class="line">      # exactly like the default standard analyzer</div><div class="line">      myAnalyzer2 :</div><div class="line">        <span class="type">tokenizer</span> : <span class="type">standard</span></div><div class="line">        filter : [<span class="type">standard</span>, lowercase, stop]</div><div class="line">    tokenizer :</div><div class="line">      <span class="type">myTokenizer1</span> :</div><div class="line">        <span class="type">type</span> : <span class="type">standard</span></div><div class="line">        max_token_length : 900</div><div class="line">      myTokenizer2 :</div><div class="line">        <span class="type">type</span> : <span class="type">keyword</span></div><div class="line">        buffer_size : 512</div><div class="line">    filter :</div><div class="line">      <span class="type">myTokenFilter1</span> :</div><div class="line">        <span class="type">type</span> : <span class="type">stop</span></div><div class="line">        stopwords : [<span class="type">stop1</span>, stop2, stop3, stop4]</div><div class="line">      myTokenFilter2 :</div><div class="line">        <span class="type">type</span> : <span class="type">length</span></div><div class="line">        min : 0</div><div class="line">        max : 2000</div></pre></td></tr></table></figure></p>
+<h4 id="Analyzer"><a href="#Analyzer" class="headerlink" title="Analyzer"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analyzer.html" target="_blank" rel="external">Analyzer</a></h4><p>/Tokennizer{1} + TokenFilter*/</p>
+<p>Predefined tokenizers, token filters and character filters to configure custome analyzers.</p>
+<p><strong><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-analyzers.html" target="_blank" rel="external">Built-in analyzers</a></strong></p>
+<ul>
+<li>Standard Analyzer</li>
+<li>Simple Analyzer</li>
+<li>Whitespace Analyzer</li>
+<li>Stop Analyzer</li>
+<li>Keyword Analyzer</li>
+<li>Pattern Analyzer</li>
+<li>Language Analyzers</li>
+<li>Snowball Analyzer</li>
+<li>Custom Analyzer</li>
+</ul>
+<h4 id="Tokenizer"><a href="#Tokenizer" class="headerlink" title="Tokenizer"></a>Tokenizer</h4><h4 id="Token-Filter"><a href="#Token-Filter" class="headerlink" title="Token Filter"></a>Token Filter</h4><ul>
+<li>Standard </li>
+<li>ASCII Folding </li>
+<li>Length </li>
+<li>Lowercase </li>
+<li>Uppercase </li>
+<li>NGram </li>
+<li>Edge NGram </li>
+<li>Porter Stem </li>
+<li>Shingle </li>
+<li>Stop </li>
+<li>Word Delimiter </li>
+<li>Stemmer </li>
+<li>Stemmer Override </li>
+<li>Keyword Marker </li>
+<li>Keyword Repeat </li>
+<li>KStem </li>
+<li>Snowball </li>
+<li>Phonetic </li>
+<li>Synonym </li>
+<li>Compound Word </li>
+<li>Reverse </li>
+<li>Elision </li>
+<li>Truncate </li>
+<li>Unique </li>
+<li>Pattern Capture </li>
+<li>Pattern Replace </li>
+<li>Trim </li>
+<li>Limit Token Count </li>
+<li>Hunspell </li>
+<li>Common Grams </li>
+<li>Normalization </li>
+<li>CJK Width </li>
+<li>CJK Bigram </li>
+<li>Delimited Payload </li>
+<li>Keep Words </li>
+<li>Keep Types </li>
+<li>Classic </li>
+<li>Apostrophe </li>
+<li>Decimal Digit </li>
+</ul>
+<h4 id="Character-Filter"><a href="#Character-Filter" class="headerlink" title="Character Filter"></a>Character Filter</h4><hr>
+<h2 id="Query"><a href="#Query" class="headerlink" title="Query"></a>Query</h2><h3 id="Query-API"><a href="#Query-API" class="headerlink" title="Query API"></a>Query API</h3><h4 id="Basic-Query-String"><a href="#Basic-Query-String" class="headerlink" title="Basic Query String"></a>Basic Query String</h4><ul>
+<li>{endpoint}/_search?q=hello&amp;size=5</li>
+</ul>
+<p>Ref:</p>
+<ul>
+<li><a href="http://lucene.apache.org/core/old_versioned_docs/versions/3_0_0/queryparsersyntax.html" target="_blank" rel="external">Lucene query parser syntax</a></li>
+<li><a href="http://www.elasticsearch.org/guide/reference/api/search/uri-request.html" target="_blank" rel="external">ElasticSearch URI request docs</a></li>
+</ul>
+<h4 id="Full-Query-API"><a href="#Full-Query-API" class="headerlink" title="Full Query API"></a>Full Query API</h4><ul>
+<li>{endpoint}/_search?source={Query-as-JSON}</li>
+<li>curl -XGET {endpoint}/_search -d ‘Query-as-JSON’</li>
+</ul>
+<h4 id="Query-Language"><a href="#Query-Language" class="headerlink" title="Query Language"></a>Query Language</h4><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  size: <span class="string">"number of results to return (defaults to 10)"</span>,</div><div class="line">  from: <span class="string">"offset into results (defaults to 0)"</span>,</div><div class="line">  field<span class="variable">s:</span> <span class="string">"list of document fields that should be returned - http://elasticsearch.org/guide/reference/api/search/fields.html"</span>,</div><div class="line">  <span class="keyword">sor</span><span class="variable">t:</span> <span class="string">"define sort order - see http://elasticsearch.org/guide/reference/api/search/sort.html"</span>,</div><div class="line"></div><div class="line">  query: &#123;</div><div class="line">    </div><div class="line">  &#125;,</div><div class="line"></div><div class="line">  facet<span class="variable">s:</span> &#123;</div><div class="line">    # facets specifications</div><div class="line">    # Facets provide summary information about <span class="keyword">a</span> particular field <span class="built_in">or</span> fields in the data</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  # special case <span class="keyword">for</span> situations where you want <span class="keyword">to</span> apply <span class="built_in">filter</span>/query <span class="keyword">to</span> results but *not* <span class="keyword">to</span> facets</div><div class="line">  <span class="built_in">filter</span>: &#123;</div><div class="line">    # <span class="built_in">filter</span> objects</div><div class="line">    # <span class="keyword">a</span> <span class="built_in">filter</span> <span class="keyword">is</span> <span class="keyword">a</span> simple <span class="string">"filter"</span> (query) <span class="keyword">on</span> <span class="keyword">a</span> specific field.</div><div class="line">    # Simple means <span class="keyword">e</span>.g. checking against <span class="keyword">a</span> specific value <span class="built_in">or</span> <span class="built_in">range</span> of <span class="built_in">values</span></div><div class="line">  &#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h3><ul>
+<li>Query Context: How well does this document match this query clause?</li>
+<li>Filter Context: Does this document match this query clause?</li>
+</ul>
+<hr>
+<h3 id="Query-Cateories"><a href="#Query-Cateories" class="headerlink" title="Query Cateories"></a>Query Cateories</h3><ul>
+<li>Leaf query clauses<ul>
+<li>match</li>
+<li>term</li>
+<li>range</li>
+</ul>
+</li>
+<li>Compound query clauses<ul>
+<li>not</li>
+<li>bool</li>
+<li>dis_max</li>
+<li>constant_score</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="Query-Types"><a href="#Query-Types" class="headerlink" title="Query Types"></a>Query Types</h3><h4 id="Match-All-Query"><a href="#Match-All-Query" class="headerlink" title="Match All Query"></a>Match All Query</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123; <span class="attr">"match_all"</span>: &#123;&#125; &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123; <span class="attr">"match_all"</span>: &#123; <span class="attr">"boost"</span> : <span class="number">1.2</span> &#125;&#125;</div></pre></td></tr></table></figure>
+<h4 id="Full-Text-Queries"><a href="#Full-Text-Queries" class="headerlink" title="Full Text Queries"></a>Full Text Queries</h4><h5 id="Match-Query"><a href="#Match-Query" class="headerlink" title="Match Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html" target="_blank" rel="external">Match Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"match"</span> : &#123;</div><div class="line">    <span class="attr">"field_name"</span> : <span class="string">"the query"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"match"</span> : &#123;</div><div class="line">    <span class="attr">"message"</span> : &#123;</div><div class="line">      <span class="attr">"query"</span> : <span class="string">"the query"</span>,</div><div class="line">      <span class="attr">"operator"</span> : <span class="string">"and"</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Supported parameters:</p>
+<ul>
+<li>analyzer</li>
+<li>boost</li>
+<li>operator</li>
+<li>minimum_should_match</li>
+<li>fuzziness</li>
+<li>prefix_length</li>
+<li>max_expansions</li>
+<li>rewrite</li>
+<li>zero_terms_query </li>
+<li>cutoff_frequency</li>
+</ul>
+<h6 id="boolean-default"><a href="#boolean-default" class="headerlink" title="boolean (default)"></a>boolean (default)</h6><ul>
+<li>fuzziness</li>
+<li>zero_terms_query</li>
+<li>cutoff_frequency<ul>
+<li>relative: [0..1), absolute: 1.0..infinite</li>
+<li>per-shard-level</li>
+</ul>
+</li>
+</ul>
+<h6 id="phrase"><a href="#phrase" class="headerlink" title="phrase"></a>phrase</h6><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"match_phrase"</span> : &#123;</div><div class="line">    <span class="attr">"message"</span> : <span class="string">"this is a test"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"match"</span> : &#123;</div><div class="line">    <span class="attr">"message"</span> : &#123;</div><div class="line">      <span class="attr">"query"</span> : <span class="string">"this is a test"</span>,</div><div class="line">      <span class="attr">"type"</span> : <span class="string">"phrase"</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h6 id="phrase-prefix"><a href="#phrase-prefix" class="headerlink" title="phrase_prefix"></a>phrase_prefix</h6><p>Same as match_phrase, except that it allows for prefix matches on the last term in the text.</p>
+<hr>
+<h5 id="Multi-match-Query"><a href="#Multi-match-Query" class="headerlink" title="Multi-match Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html" target="_blank" rel="external">Multi-match Query</a></h5><p>Multi-field queires.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"multi_match"</span> : &#123;</div><div class="line">    <span class="attr">"query"</span>:    <span class="string">"this is a test"</span>, </div><div class="line">    <span class="attr">"fields"</span>: [ <span class="string">"subject^3"</span>, <span class="string">"message"</span>, <span class="string">"*_name"</span> ] </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Types:</p>
+<ul>
+<li>best_fields: (default) any fields with best <code>_score</code></li>
+<li>most_fields: any fields and conbines the <code>_score</code></li>
+<li>cross_fields:  aggs fields of same <code>analyzer</code></li>
+<li>phrase: run <code>match_phrase</code> query on each field and conbines <code>_score</code></li>
+<li>phrase_prefix: similar with <code>phrase</code></li>
+</ul>
+<h5 id="Common-terms-Query"><a href="#Common-terms-Query" class="headerlink" title="Common_terms Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-common-terms-query.html" target="_blank" rel="external">Common_terms Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"common"</span>: &#123;</div><div class="line">    <span class="attr">"body"</span>: &#123;</div><div class="line">      <span class="attr">"query"</span>: <span class="string">"nelly the elephant as a cartoon"</span>,</div><div class="line">      <span class="attr">"cutoff_frequency"</span>: <span class="number">0.001</span>,</div><div class="line">      <span class="attr">"minimum_should_match"</span>: <span class="number">2</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"common"</span>: &#123;</div><div class="line">    <span class="attr">"body"</span>: &#123;</div><div class="line">      <span class="attr">"query"</span>: <span class="string">"nelly the elephant not as a cartoon"</span>,</div><div class="line">      <span class="attr">"cutoff_frequency"</span>: <span class="number">0.001</span>,</div><div class="line">      <span class="attr">"minimum_should_match"</span>: &#123;</div><div class="line">          <span class="attr">"low_freq"</span> : <span class="number">2</span>,</div><div class="line">          <span class="attr">"high_freq"</span> : <span class="number">3</span></div><div class="line">       &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Query-String-Query"><a href="#Query-String-Query" class="headerlink" title="Query String Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html" target="_blank" rel="external">Query String Query</a></h5><p>Full-text style query across all fields(<code>default_field</code> defaults to <code>_all</code>).<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"query_string"</span> : &#123;</div><div class="line">    <span class="attr">"default_field"</span> : <span class="string">"content"</span>,</div><div class="line">    <span class="attr">"query"</span> : <span class="string">"this AND that OR thus"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"query_string"</span> : &#123;</div><div class="line">    <span class="attr">"fields"</span> : [<span class="string">"content"</span>, <span class="string">"name"</span>],</div><div class="line">    <span class="attr">"query"</span> : <span class="string">"this AND that"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Parameter:</p>
+<ul>
+<li>query</li>
+<li>default_field (_all)</li>
+<li>default_operator (OR)</li>
+<li>analyzer</li>
+<li>allow_leading_wildcard (true)</li>
+<li>lowercase_expanded_terms (wildcard, prefix, fuzzy, and range queries) (true)</li>
+<li>enable_position_increments (true)</li>
+<li>fuzzy_max_expansions (50)</li>
+<li>fuzziness (AUTO)</li>
+<li>fuzzy_prefix_length (0)</li>
+<li>phrase_slop (0)</li>
+<li>boost (1.0)</li>
+<li>analyze_wildcard (false)</li>
+<li>auto_generate_phrase_queries (false)</li>
+<li>max_determinized_states (10000)</li>
+<li>minimum_should_match</li>
+<li>lenient (false)</li>
+<li>locale (ROOT)</li>
+<li>time_zone []Joda timezone(<a href="http://www.joda.org/joda-time/apidocs/org/joda/time/DateTimeZone.html" target="_blank" rel="external">http://www.joda.org/joda-time/apidocs/org/joda/time/DateTimeZone.html</a>)</li>
+</ul>
+<h5 id="Simple-Query-String-Query"><a href="#Simple-Query-String-Query" class="headerlink" title="Simple Query String Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html" target="_blank" rel="external">Simple Query String Query</a></h5><p>Never throw an exception, and discards invalid parts of the query.</p>
+<h4 id="Term-Level-Queries"><a href="#Term-Level-Queries" class="headerlink" title="Term Level Queries"></a>Term Level Queries</h4><h5 id="Term-Query"><a href="#Term-Query" class="headerlink" title="Term Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-term-query.html" target="_blank" rel="external">Term Query</a></h5><p>Finds documents which contain the exact term <code>Kimchy</code> in the inverted index of the <code>user</code> field.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"term"</span> : &#123; <span class="attr">"user"</span> : <span class="string">"Kimchy"</span> &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Optional <code>boost</code><br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">    <span class="attr">"bool"</span>: &#123;</div><div class="line">      <span class="attr">"should"</span>: [</div><div class="line">        &#123;</div><div class="line">          <span class="attr">"term"</span>: &#123;</div><div class="line">            <span class="attr">"status"</span>: &#123;</div><div class="line">              <span class="attr">"value"</span>: <span class="string">"urgent"</span>,</div><div class="line">              <span class="attr">"boost"</span>: <span class="number">2.0</span> </div><div class="line">            &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">          <span class="attr">"term"</span>: &#123;</div><div class="line">            <span class="attr">"status"</span>: <span class="string">"normal"</span> </div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      ]</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="Terms-Query"><a href="#Terms-Query" class="headerlink" title="Terms Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-terms-query.html" target="_blank" rel="external">Terms Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"constant_score"</span> : &#123;</div><div class="line">    <span class="attr">"filter"</span> : &#123;</div><div class="line">      <span class="attr">"terms"</span> : &#123; <span class="attr">"user"</span> : [<span class="string">"kimchy"</span>, <span class="string">"elasticsearch"</span>]&#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Range-Query"><a href="#Range-Query" class="headerlink" title="Range Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-range-query.html" target="_blank" rel="external">Range Query</a></h5><ul>
+<li>TermRangeQuery (string)</li>
+<li>NumericRangeQuery (number/date)<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"range"</span> : &#123;</div><div class="line">    <span class="attr">"age"</span> : &#123;</div><div class="line">      <span class="attr">"gte"</span> : <span class="number">10</span>,</div><div class="line">      <span class="attr">"lte"</span> : <span class="number">20</span>,</div><div class="line">      <span class="attr">"boost"</span> : <span class="number">2.0</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#date-math" target="_blank" rel="external">Date Math</a>:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"range"</span> : &#123;</div><div class="line">    <span class="attr">"date"</span> : &#123;</div><div class="line">      <span class="attr">"gte"</span> : <span class="string">"now-1d/d"</span>,</div><div class="line">      <span class="attr">"lt"</span> :  <span class="string">"now/d"</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Date format &amp; time zone:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"range"</span> : &#123;</div><div class="line">    <span class="attr">"born"</span> : &#123;</div><div class="line">      <span class="attr">"gte"</span>: <span class="string">"01/01/2012"</span>,</div><div class="line">      <span class="attr">"lte"</span>: <span class="string">"2013"</span>,</div><div class="line">      <span class="attr">"format"</span>: <span class="string">"dd/MM/yyyy||yyyy"</span>,</div><div class="line">      <span class="attr">"time_zone"</span>: <span class="string">"-04:00"</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Parameters:</p>
+<ul>
+<li>gte: Greater-than or equal to</li>
+<li>gt: Greater-than</li>
+<li>lte: Less-than or equal to</li>
+<li>lt: Less-than</li>
+<li>boost: Sets the boost value of the query, defaults to 1.0</li>
+</ul>
+<h5 id="Exists-Query"><a href="#Exists-Query" class="headerlink" title="Exists Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-exists-query.html" target="_blank" rel="external">Exists Query</a></h5><p>Returns documents that have at least one non-null value in the original field.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"exists"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"user"</span> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="Missing-Query"><a href="#Missing-Query" class="headerlink" title="Missing Query"></a>Missing Query</h5><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="string">"bool"</span>: &#123;</div><div class="line">  <span class="string">"must_not"</span>: &#123;</div><div class="line">    <span class="string">"exists"</span>: &#123;</div><div class="line">      <span class="string">"field"</span>: <span class="string">"user"</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Prefix-Query"><a href="#Prefix-Query" class="headerlink" title="Prefix Query"></a>Prefix Query</h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"prefix"</span> : &#123; <span class="attr">"user"</span> : <span class="string">"ki"</span> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Optional boost:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"prefix"</span> : &#123; <span class="attr">"user"</span> :  &#123; <span class="attr">"value"</span> : <span class="string">"ki"</span>, <span class="attr">"boost"</span> : <span class="number">2.0</span> &#125; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="Wildcard-Query"><a href="#Wildcard-Query" class="headerlink" title="Wildcard Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-wildcard-query.html" target="_blank" rel="external">Wildcard Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"wildcard"</span> : &#123; <span class="attr">"user"</span> : <span class="string">"ki*y"</span> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Optional boost:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"wildcard"</span> : &#123; <span class="attr">"user"</span> : &#123; <span class="attr">"value"</span> : <span class="string">"ki*y"</span>, <span class="attr">"boost"</span> : <span class="number">2.0</span> &#125; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="Regexp-Query"><a href="#Regexp-Query" class="headerlink" title="Regexp Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-regexp-query.html" target="_blank" rel="external">Regexp Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"regexp"</span> : &#123; <span class="attr">"user"</span> : <span class="string">"ki.*y"</span> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Optional boost:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"regexp"</span> : &#123; <span class="attr">"user"</span> : &#123; <span class="attr">"value"</span> : <span class="string">"ki.*y"</span>, <span class="attr">"boost"</span> : <span class="number">2.0</span> &#125; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="Fuzzy-Query"><a href="#Fuzzy-Query" class="headerlink" title="Fuzzy Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-fuzzy-query.html" target="_blank" rel="external">Fuzzy Query</a></h5><ul>
+<li>Levenshtein edit distance for string</li>
+<li>+/- margin on numeric and date</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"fuzzy"</span> : &#123; <span class="attr">"user"</span> : <span class="string">"ki"</span> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"fuzzy"</span> : &#123;</div><div class="line">    <span class="attr">"user"</span> : &#123;</div><div class="line">      <span class="attr">"value"</span> :         <span class="string">"ki"</span>,</div><div class="line">      <span class="attr">"boost"</span> :         <span class="number">1.0</span>,</div><div class="line">      <span class="attr">"fuzziness"</span> :     <span class="number">2</span>,</div><div class="line">      <span class="attr">"prefix_length"</span> : <span class="number">0</span>,</div><div class="line">      <span class="attr">"max_expansions"</span>: <span class="number">100</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"fuzzy"</span> : &#123;</div><div class="line">    <span class="attr">"price"</span> : &#123;</div><div class="line">      <span class="attr">"value"</span> : <span class="number">12</span>,</div><div class="line">      <span class="attr">"fuzziness"</span> : <span class="number">2</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"fuzzy"</span> : &#123;</div><div class="line">    <span class="attr">"created"</span> : &#123;</div><div class="line">      <span class="attr">"value"</span> : <span class="string">"2010-02-05T12:05:07"</span>,</div><div class="line">      <span class="attr">"fuzziness"</span> : <span class="string">"1d"</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Parameters:</p>
+<ul>
+<li>fuzziness: The maximum edit distance. Defaults to <code>AUTO</code>.</li>
+<li>prefix_length: The number of initial characters which will not be “fuzzified”. This helps to reduce the number of terms which must be examined. Defaults to 0.</li>
+<li>max_expansions: The maximum number of terms that the fuzzy query will expand to. Defaults to 50.</li>
+</ul>
+<h5 id="Type-Query"><a href="#Type-Query" class="headerlink" title="Type Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-type-query.html" target="_blank" rel="external">Type Query</a></h5><p>Matching the provided document / mapping type.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"type"</span> : &#123;</div><div class="line">    <span class="attr">"value"</span> : <span class="string">"my_type"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="IDs-Query"><a href="#IDs-Query" class="headerlink" title="IDs Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-ids-query.html" target="_blank" rel="external">IDs Query</a></h5><p>Filters documents that only have the provided <code>_uid</code>.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"ids"</span> : &#123;</div><div class="line">    <span class="attr">"type"</span> : <span class="string">"my_type"</span>,</div><div class="line">    <span class="attr">"values"</span> : [<span class="string">"1"</span>, <span class="string">"4"</span>, <span class="string">"100"</span>]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="Compound-Queries"><a href="#Compound-Queries" class="headerlink" title="Compound Queries"></a>Compound Queries</h4><h5 id="Constant-Score-query"><a href="#Constant-Score-query" class="headerlink" title="Constant Score query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-constant-score-query.html" target="_blank" rel="external">Constant Score query</a></h5><p>A query that wraps another query and simply returns a constant score equal to the query boost for every document in the filter. Maps to Lucene ConstantScoreQuery.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"constant_score"</span> : &#123;</div><div class="line">    <span class="attr">"filter"</span> : &#123;</div><div class="line">      <span class="attr">"term"</span> : &#123; <span class="attr">"user"</span> : <span class="string">"kimchy"</span>&#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"boost"</span> : <span class="number">1.2</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="Bool-Query"><a href="#Bool-Query" class="headerlink" title="Bool Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html" target="_blank" rel="external">Bool Query</a></h5><p>Occurrence types:</p>
+<ul>
+<li>must: The clause (query) must appear in matching documents and will contribute to the score.</li>
+<li>filter: The clause (query) must appear in matching documents. the score of the query will be ignored.</li>
+<li>should: The clause (query) should appear in the matching document. In a boolean query with no must clauses, one or more should clauses must match a document, the minimum number of should clauses to match can be set using the minimum_should_match parameter.</li>
+<li>must_not: The clause (query) must not appear in the matching documents.</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"bool"</span> : &#123;</div><div class="line">    <span class="attr">"must"</span> : &#123;</div><div class="line">      <span class="attr">"term"</span> : &#123; <span class="attr">"user"</span> : <span class="string">"kimchy"</span> &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"filter"</span>: &#123;</div><div class="line">      <span class="attr">"term"</span> : &#123; <span class="attr">"tag"</span> : <span class="string">"tech"</span> &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"must_not"</span> : &#123;</div><div class="line">      <span class="attr">"range"</span> : &#123;</div><div class="line">        <span class="attr">"age"</span> : &#123; <span class="attr">"from"</span> : <span class="number">10</span>, <span class="attr">"to"</span> : <span class="number">20</span> &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"should"</span> : [</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"term"</span> : &#123; <span class="attr">"tag"</span> : <span class="string">"wow"</span> &#125;</div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"term"</span> : &#123; <span class="attr">"tag"</span> : <span class="string">"elasticsearch"</span> &#125;</div><div class="line">      &#125;</div><div class="line">    ],</div><div class="line">    <span class="attr">"minimum_should_match"</span> : <span class="number">1</span>,</div><div class="line">    <span class="attr">"boost"</span> : <span class="number">1.0</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Dis-Max-Query"><a href="#Dis-Max-Query" class="headerlink" title="Dis Max Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-dis-max-query.html" target="_blank" rel="external">Dis Max Query</a></h5><p>Generates the union of documents produced by its subqueries, an dscores each document with the maximum score for that document as produced by any subquery, plus a tie breaking increment for any additional matching subqueries.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"dis_max"</span> : &#123;</div><div class="line">    <span class="attr">"tie_breaker"</span> : <span class="number">0.7</span>,</div><div class="line">    <span class="attr">"boost"</span> : <span class="number">1.2</span>,</div><div class="line">    <span class="attr">"queries"</span> : [</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"term"</span> : &#123; <span class="attr">"age"</span> : <span class="number">34</span> &#125;</div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        <span class="attr">"term"</span> : &#123; <span class="attr">"age"</span> : <span class="number">35</span> &#125;</div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="Function-Score-Query"><a href="#Function-Score-Query" class="headerlink" title="Function Score Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html" target="_blank" rel="external">Function Score Query</a></h5><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">"function_score"</span>: &#123;</div><div class="line">  <span class="string">"query"</span>: &#123;&#125;,</div><div class="line">  <span class="string">"boost"</span>: <span class="string">"boost for the whole query"</span>,</div><div class="line">  <span class="string">"FUNCTION"</span>: &#123;&#125;, </div><div class="line">  <span class="string">"boost_mode"</span>:<span class="string">"(multiply|replace|...)"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="string">"function_score"</span>: &#123;</div><div class="line">  <span class="string">"query"</span>: &#123;&#125;,</div><div class="line">  <span class="string">"boost"</span>: <span class="string">"boost for the whole query"</span>,</div><div class="line">  <span class="string">"functions"</span>: [</div><div class="line">    &#123;</div><div class="line">      <span class="string">"filter"</span>: &#123;&#125;,</div><div class="line">      <span class="string">"FUNCTION"</span>: &#123;&#125;, </div><div class="line">      <span class="string">"weight"</span>: number</div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">      <span class="string">"FUNCTION"</span>: &#123;&#125; </div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">      <span class="string">"filter"</span>: &#123;&#125;,</div><div class="line">      <span class="string">"weight"</span>: number</div><div class="line">    &#125;</div><div class="line">  ],</div><div class="line">  <span class="string">"max_boost"</span>: number,</div><div class="line">  <span class="string">"score_mode"</span>: <span class="string">"(multiply|max|...)"</span>,</div><div class="line">  <span class="string">"boost_mode"</span>: <span class="string">"(multiply|replace|...)"</span>,</div><div class="line">  <span class="string">"min_score"</span> : number</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>score_mode:</p>
+<ul>
+<li><code>multiply</code>: scores are multiplied (default)</li>
+<li><code>sum</code>: scores are summed</li>
+<li><code>avg</code>: scores are averaged</li>
+<li><code>first</code>: the first function that has a matching filter is applied</li>
+<li><code>max</code>: maximum score is used</li>
+<li><code>min</code>: minimum score is used</li>
+</ul>
+<p>boost_mode:</p>
+<ul>
+<li><code>multiply</code>: query score and function score is multiplied (default)</li>
+<li><code>replace</code>: only function score is used, the query score is ignored</li>
+<li><code>sum</code>: query score and function score are added</li>
+<li><code>avg</code>: average</li>
+<li><code>max</code>: max of query score and function score</li>
+<li><code>min</code>: min of query score and function score</li>
+</ul>
+<h5 id="Boosting-Query"><a href="#Boosting-Query" class="headerlink" title="Boosting Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-boosting-query.html" target="_blank" rel="external">Boosting Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"boosting"</span> : &#123;</div><div class="line">    <span class="attr">"positive"</span> : &#123;</div><div class="line">      <span class="attr">"term"</span> : &#123;</div><div class="line">        <span class="attr">"field1"</span> : <span class="string">"value1"</span></div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"negative"</span> : &#123;</div><div class="line">      <span class="attr">"term"</span> : &#123;</div><div class="line">        <span class="attr">"field2"</span> : <span class="string">"value2"</span></div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"negative_boost"</span> : <span class="number">0.2</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Indices-Query"><a href="#Indices-Query" class="headerlink" title="Indices Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-indices-query.html" target="_blank" rel="external">Indices Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"indices"</span> : &#123;</div><div class="line">    <span class="attr">"indices"</span> : [<span class="string">"index1"</span>, <span class="string">"index2"</span>],</div><div class="line">    <span class="attr">"query"</span> : &#123;</div><div class="line">      <span class="attr">"term"</span> : &#123; <span class="attr">"tag"</span> : <span class="string">"wow"</span> &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"no_match_query"</span> : &#123;</div><div class="line">      <span class="attr">"term"</span> : &#123; <span class="attr">"tag"</span> : <span class="string">"kow"</span> &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Limit-Query"><a href="#Limit-Query" class="headerlink" title="Limit Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-limit-query.html" target="_blank" rel="external">Limit Query</a></h5><p>A limit query limits the number of documents (per shard) to execute on.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"bool"</span>: &#123;</div><div class="line">    <span class="attr">"must"</span>: &#123;</div><div class="line">      <span class="attr">"term"</span> : &#123; <span class="attr">"name.first"</span> : <span class="string">"shay"</span> &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"filter"</span> : &#123;</div><div class="line">      <span class="attr">"limit"</span> : &#123;<span class="attr">"value"</span> : <span class="number">100</span>&#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="Joining-Queries"><a href="#Joining-Queries" class="headerlink" title="Joining Queries"></a>Joining Queries</h4><h5 id="Nested-Query"><a href="#Nested-Query" class="headerlink" title="Nested Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-nested-query.html" target="_blank" rel="external">Nested Query</a></h5><p>Sample mapping:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"type1"</span> : &#123;</div><div class="line">    <span class="attr">"properties"</span> : &#123;</div><div class="line">      <span class="attr">"obj1"</span> : &#123;</div><div class="line">        <span class="attr">"type"</span> : <span class="string">"nested"</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Sample nested query:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"nested"</span> : &#123;</div><div class="line">    <span class="attr">"path"</span> : <span class="string">"obj1"</span>,</div><div class="line">    <span class="attr">"score_mode"</span> : <span class="string">"avg"</span>,</div><div class="line">    <span class="attr">"query"</span> : &#123;</div><div class="line">      <span class="attr">"bool"</span> : &#123;</div><div class="line">        <span class="attr">"must"</span> : [</div><div class="line">          &#123;</div><div class="line">            <span class="attr">"match"</span> : &#123;<span class="attr">"obj1.name"</span> : <span class="string">"blue"</span>&#125;</div><div class="line">          &#125;,</div><div class="line">          &#123;</div><div class="line">            <span class="attr">"range"</span> : &#123;<span class="attr">"obj1.count"</span> : &#123;<span class="attr">"gt"</span> : <span class="number">5</span>&#125;&#125;</div><div class="line">          &#125;</div><div class="line">        ]</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="Has-Child-Query"><a href="#Has-Child-Query" class="headerlink" title="Has Child Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-has-child-query.html" target="_blank" rel="external">Has Child Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"has_child"</span> : &#123;</div><div class="line">    <span class="attr">"type"</span> : <span class="string">"blog_tag"</span>,</div><div class="line">    <span class="attr">"score_mode"</span> : <span class="string">"sum"</span>,</div><div class="line">    <span class="attr">"min_children"</span>: <span class="number">2</span>, </div><div class="line">    <span class="attr">"max_children"</span>: <span class="number">10</span>, </div><div class="line">    <span class="attr">"query"</span> : &#123;</div><div class="line">      <span class="attr">"term"</span> : &#123;</div><div class="line">        <span class="attr">"tag"</span> : <span class="string">"something"</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Has-Parent-Query"><a href="#Has-Parent-Query" class="headerlink" title="Has Parent Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-has-parent-query.html" target="_blank" rel="external">Has Parent Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"has_parent"</span> : &#123;</div><div class="line">        <span class="attr">"parent_type"</span> : <span class="string">"blog"</span>,</div><div class="line">        <span class="attr">"score_mode"</span> : <span class="string">"score"</span>,</div><div class="line">        <span class="attr">"query"</span> : &#123;</div><div class="line">            <span class="attr">"term"</span> : &#123;</div><div class="line">                <span class="attr">"tag"</span> : <span class="string">"something"</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="Geo-Queries"><a href="#Geo-Queries" class="headerlink" title="Geo Queries"></a>Geo Queries</h4><h5 id="GeoShape-Query"><a href="#GeoShape-Query" class="headerlink" title="GeoShape Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-shape-query.html" target="_blank" rel="external">GeoShape Query</a></h5><p>Requires the <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/geo-shape.html" target="_blank" rel="external">geo_shape Mapping</a>.</p>
+<p>Given docoment:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"Wind &amp; Wetter, Berlin, Germany"</span>,</div><div class="line">  <span class="attr">"location"</span>: &#123;</div><div class="line">    <span class="attr">"type"</span>: <span class="string">"Point"</span>,</div><div class="line">    <span class="attr">"coordinates"</span>: [<span class="number">13.400544</span>, <span class="number">52.530286</span>]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>With <code>envelope</code> extensoin:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>:&#123;</div><div class="line">    <span class="attr">"bool"</span>: &#123;</div><div class="line">      <span class="attr">"must"</span>: &#123;</div><div class="line">        <span class="attr">"match_all"</span>: &#123;&#125;</div><div class="line">      &#125;,</div><div class="line">      <span class="attr">"filter"</span>: &#123;</div><div class="line">        <span class="attr">"geo_shape"</span>: &#123;</div><div class="line">          <span class="attr">"location"</span>: &#123;</div><div class="line">            <span class="attr">"shape"</span>: &#123;</div><div class="line">              <span class="attr">"type"</span>: <span class="string">"envelope"</span>,</div><div class="line">              <span class="attr">"coordinates"</span> : [[<span class="number">13.0</span>, <span class="number">53.0</span>], [<span class="number">14.0</span>, <span class="number">52.0</span>]]</div><div class="line">            &#125;,</div><div class="line">            <span class="attr">"relation"</span>: <span class="string">"within"</span></div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="Geo-Bounding-Box-Query"><a href="#Geo-Bounding-Box-Query" class="headerlink" title="Geo Bounding Box Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-bounding-box-query.html" target="_blank" rel="external">Geo Bounding Box Query</a></h5><p>Given document:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"pin"</span> : &#123;</div><div class="line">    <span class="attr">"location"</span> : &#123;</div><div class="line">      <span class="attr">"lat"</span> : <span class="number">40.12</span>,</div><div class="line">      <span class="attr">"lon"</span> : <span class="number">-71.34</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Query:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"bool"</span> : &#123;</div><div class="line">    <span class="attr">"must"</span> : &#123;</div><div class="line">      <span class="attr">"match_all"</span> : &#123;&#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"filter"</span> : &#123;</div><div class="line">      <span class="attr">"geo_bounding_box"</span> : &#123;</div><div class="line">        <span class="attr">"pin.location"</span> : &#123;</div><div class="line">          <span class="attr">"top_left"</span> : &#123;</div><div class="line">            <span class="attr">"lat"</span> : <span class="number">40.73</span>,</div><div class="line">            <span class="attr">"lon"</span> : <span class="number">-74.1</span></div><div class="line">          &#125;,</div><div class="line">          <span class="attr">"bottom_right"</span> : &#123;</div><div class="line">            <span class="attr">"lat"</span> : <span class="number">40.01</span>,</div><div class="line">            <span class="attr">"lon"</span> : <span class="number">-71.12</span></div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="Geo-Distance-Queqy"><a href="#Geo-Distance-Queqy" class="headerlink" title="Geo Distance Queqy"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-distance-query.html" target="_blank" rel="external">Geo Distance Queqy</a></h5><p>Givven document:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"pin"</span> : &#123;</div><div class="line">    <span class="attr">"location"</span> : &#123;</div><div class="line">      <span class="attr">"lat"</span> : <span class="number">40.12</span>,</div><div class="line">      <span class="attr">"lon"</span> : <span class="number">-71.34</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Query:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"bool"</span> : &#123;</div><div class="line">    <span class="attr">"must"</span> : &#123;</div><div class="line">      <span class="attr">"match_all"</span> : &#123;&#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"filter"</span> : &#123;</div><div class="line">      <span class="attr">"geo_distance"</span> : &#123;</div><div class="line">        <span class="attr">"distance"</span> : <span class="string">"200km"</span>,</div><div class="line">        <span class="attr">"pin.location"</span> : &#123;</div><div class="line">          <span class="attr">"lat"</span> : <span class="number">40</span>,</div><div class="line">          <span class="attr">"lon"</span> : <span class="number">-70</span></div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Options:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Descript</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>distance</td>
+<td>The radius of the circle centred on the specified location. Points which fall into this circle are considered to be matches. The distance can be specified in various units. See the section called “Distance Unitsedit”.</td>
+</tr>
+<tr>
+<td>distance_type</td>
+<td>How to compute the distance. Can either be sloppy_arc (default), arc (slightly more precise but significantly slower) or plane (faster, but inaccurate on long distances and close to the poles).</td>
+</tr>
+<tr>
+<td>optimize_bbox</td>
+<td>Whether to use the optimization of first running a bounding box check before the distance check. Defaults to memory which will do in memory checks. Can also have values of indexed to use indexed value check (make sure the geo_point type index lat lon in this case), or none which disables bounding box optimization.</td>
+</tr>
+<tr>
+<td>_name</td>
+<td>Optional name field to identify the query</td>
+</tr>
+<tr>
+<td>coerce</td>
+<td>Set to true to normalize longitude and latitude values to a standard -180:180 / -90:90 coordinate system. (default is false).</td>
+</tr>
+<tr>
+<td>ignore_malformed</td>
+<td>Set to true to accept geo points with invalid latitude or longitude (default is false).</td>
+</tr>
+</tbody>
+</table>
+<h5 id="Geo-Distance-Range-Query"><a href="#Geo-Distance-Range-Query" class="headerlink" title="Geo Distance Range Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-distance-range-query.html" target="_blank" rel="external">Geo Distance Range Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"bool"</span> : &#123;</div><div class="line">    <span class="attr">"must"</span> : &#123;</div><div class="line">      <span class="attr">"match_all"</span> : &#123;&#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"filter"</span> : &#123;</div><div class="line">      <span class="attr">"geo_distance_range"</span> : &#123;</div><div class="line">        <span class="attr">"from"</span> : <span class="string">"200km"</span>,</div><div class="line">        <span class="attr">"to"</span> : <span class="string">"400km"</span>,</div><div class="line">        <span class="attr">"pin.location"</span> : &#123;</div><div class="line">          <span class="attr">"lat"</span> : <span class="number">40</span>,</div><div class="line">          <span class="attr">"lon"</span> : <span class="number">-70</span></div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Geo-Polygon-Query"><a href="#Geo-Polygon-Query" class="headerlink" title="Geo Polygon Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-polygon-query.html" target="_blank" rel="external">Geo Polygon Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"bool"</span> : &#123;</div><div class="line">    <span class="attr">"query"</span> : &#123;</div><div class="line">      <span class="attr">"match_all"</span> : &#123;&#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"filter"</span> : &#123;</div><div class="line">      <span class="attr">"geo_polygon"</span> : &#123;</div><div class="line">        <span class="attr">"person.location"</span> : &#123;</div><div class="line">          <span class="attr">"points"</span> : [</div><div class="line">            &#123;<span class="attr">"lat"</span> : <span class="number">40</span>, <span class="attr">"lon"</span> : <span class="number">-70</span>&#125;,</div><div class="line">            &#123;<span class="attr">"lat"</span> : <span class="number">30</span>, <span class="attr">"lon"</span> : <span class="number">-90</span>&#125;,</div><div class="line">            &#123;<span class="attr">"lat"</span> : <span class="number">20</span>, <span class="attr">"lon"</span> : <span class="number">-90</span>&#125;,</div><div class="line">            &#123;<span class="attr">"lat"</span> : <span class="number">10</span>, <span class="attr">"lon"</span> : <span class="number">-60</span>&#125;</div><div class="line">          ]</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Options:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>_name</td>
+<td>Optional name field to identify the filter</td>
+</tr>
+<tr>
+<td>coerce</td>
+<td>Set to true to normalize longitude and latitude values to a standard -180:180 / -90:90 coordinate system. (default is false).</td>
+</tr>
+<tr>
+<td>ignore_malformed</td>
+<td>Set to true to accept geo points with invalid latitude or longitude (default is false).</td>
+</tr>
+</tbody>
+</table>
+<h5 id="Geohash-Cell-Query"><a href="#Geohash-Cell-Query" class="headerlink" title="Geohash Cell Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geohash-cell-query.html" target="_blank" rel="external">Geohash Cell Query</a></h5><p>Geohash needs be indexed:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"mappings"</span> : &#123;</div><div class="line">    <span class="attr">"location"</span>: &#123;</div><div class="line">      <span class="attr">"properties"</span>: &#123;</div><div class="line">        <span class="attr">"pin"</span>: &#123;</div><div class="line">          <span class="attr">"type"</span>: <span class="string">"geo_point"</span>,</div><div class="line">          <span class="attr">"geohash"</span>: <span class="literal">true</span>,</div><div class="line">          <span class="attr">"geohash_prefix"</span>: <span class="literal">true</span>,</div><div class="line">          <span class="attr">"geohash_precision"</span>: <span class="number">10</span></div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="Specialized-Queries"><a href="#Specialized-Queries" class="headerlink" title="Specialized Queries"></a>Specialized Queries</h4><h5 id="More-Like-This-Query"><a href="#More-Like-This-Query" class="headerlink" title="More Like This Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-mlt-query.html" target="_blank" rel="external">More Like This Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"more_like_this"</span> : &#123;</div><div class="line">    <span class="attr">"fields"</span> : [<span class="string">"title"</span>, <span class="string">"description"</span>],</div><div class="line">    <span class="attr">"like"</span> : <span class="string">"Once upon a time"</span>,</div><div class="line">    <span class="attr">"min_term_freq"</span> : <span class="number">1</span>,</div><div class="line">    <span class="attr">"max_query_terms"</span> : <span class="number">12</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Template-Query"><a href="#Template-Query" class="headerlink" title="Template Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-template-query.html" target="_blank" rel="external">Template Query</a></h5><p><strong>Based on Mustache.</strong><br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">    <span class="attr">"template"</span>: &#123;</div><div class="line">      <span class="attr">"inline"</span>: &#123; <span class="attr">"match"</span>: &#123; <span class="attr">"text"</span>: <span class="string">"&#123;&#123;query_string&#125;&#125;"</span> &#125;&#125;,</div><div class="line">      <span class="attr">"params"</span> : &#123;</div><div class="line">        <span class="attr">"query_string"</span> : <span class="string">"all about search"</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Stored template:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">```</div><div class="line">&#123;</div><div class="line">  &quot;query&quot;: &#123;</div><div class="line">    &quot;template&quot;: &#123;</div><div class="line">      &quot;file&quot;: &quot;my_template&quot;, </div><div class="line">      &quot;params&quot; : &#123;</div><div class="line">        &quot;query_string&quot; : &quot;all about search&quot;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Or:<br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">PUT /_search/template/my_template</div><div class="line">&#123;</div><div class="line">  <span class="string">"template"</span>: &#123; <span class="string">"match"</span>: &#123; <span class="string">"text"</span>: <span class="string">"&#123;&#123;query_string&#125;&#125;"</span> &#125;&#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"query"</span>: &#123;</div><div class="line">    <span class="attr">"template"</span>: &#123;</div><div class="line">      <span class="attr">"id"</span>: <span class="string">"my_template"</span>, </div><div class="line">      <span class="attr">"params"</span> : &#123;</div><div class="line">        <span class="attr">"query_string"</span> : <span class="string">"all about search"</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Script-Query"><a href="#Script-Query" class="headerlink" title="Script Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-script-query.html" target="_blank" rel="external">Script Query</a></h5><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="string">"bool"</span> : &#123;</div><div class="line">  <span class="string">"must"</span> : &#123;</div><div class="line">    ...</div><div class="line">  &#125;,</div><div class="line">  <span class="string">"filter"</span> : &#123;</div><div class="line">    <span class="string">"script"</span> : &#123;</div><div class="line">      <span class="string">"script"</span> : "<span class="type">doc</span>[<span class="symbol">'num1</span>'].value &gt; <span class="number">1</span><span class="string">"</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Span-Query"><a href="#Span-Query" class="headerlink" title="Span Query"></a>Span Query</h4><h5 id="Span-Term-Query"><a href="#Span-Term-Query" class="headerlink" title="Span Term Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-span-term-query.html" target="_blank" rel="external">Span Term Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"span_term"</span> : &#123; <span class="attr">"user"</span> : &#123; <span class="attr">"value"</span> : <span class="string">"kimchy"</span>, <span class="attr">"boost"</span> : <span class="number">2.0</span> &#125; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Span-Multi-Term-Query"><a href="#Span-Multi-Term-Query" class="headerlink" title="Span Multi Term Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-span-multi-term-query.html" target="_blank" rel="external">Span Multi Term Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"span_multi"</span>:&#123;</div><div class="line">    <span class="attr">"match"</span>:&#123;</div><div class="line">      <span class="attr">"prefix"</span> : &#123; <span class="attr">"user"</span> :  &#123; <span class="attr">"value"</span> : <span class="string">"ki"</span>, <span class="attr">"boost"</span> : <span class="number">1.08</span> &#125; &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Span-First-Query"><a href="#Span-First-Query" class="headerlink" title="Span First Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-span-first-query.html" target="_blank" rel="external">Span First Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"span_first"</span> : &#123;</div><div class="line">    <span class="attr">"match"</span> : &#123;</div><div class="line">      <span class="attr">"span_term"</span> : &#123; <span class="attr">"user"</span> : <span class="string">"kimchy"</span> &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"end"</span> : <span class="number">3</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Span-Near-Query"><a href="#Span-Near-Query" class="headerlink" title="Span Near Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-span-near-query.html" target="_blank" rel="external">Span Near Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"span_near"</span> : &#123;</div><div class="line">    <span class="attr">"clauses"</span> : [</div><div class="line">      &#123; <span class="attr">"span_term"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"value1"</span> &#125; &#125;,</div><div class="line">      &#123; <span class="attr">"span_term"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"value2"</span> &#125; &#125;,</div><div class="line">      &#123; <span class="attr">"span_term"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"value3"</span> &#125; &#125;</div><div class="line">    ],</div><div class="line">    <span class="attr">"slop"</span> : <span class="number">12</span>,</div><div class="line">    <span class="attr">"in_order"</span> : <span class="literal">false</span>,</div><div class="line">    <span class="attr">"collect_payloads"</span> : <span class="literal">false</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Span-Or-Query"><a href="#Span-Or-Query" class="headerlink" title="Span Or Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-span-or-query.html" target="_blank" rel="external">Span Or Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"span_or"</span> : &#123;</div><div class="line">    <span class="attr">"clauses"</span> : [</div><div class="line">      &#123; <span class="attr">"span_term"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"value1"</span> &#125; &#125;,</div><div class="line">      &#123; <span class="attr">"span_term"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"value2"</span> &#125; &#125;,</div><div class="line">      &#123; <span class="attr">"span_term"</span> : &#123; <span class="attr">"field"</span> : <span class="string">"value3"</span> &#125; &#125;</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Span-Not-Query"><a href="#Span-Not-Query" class="headerlink" title="Span Not Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-span-not-query.html" target="_blank" rel="external">Span Not Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"span_not"</span> : &#123;</div><div class="line">    <span class="attr">"include"</span> : &#123;</div><div class="line">      <span class="attr">"span_term"</span> : &#123; <span class="attr">"field1"</span> : <span class="string">"hoya"</span> &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"exclude"</span> : &#123;</div><div class="line">      <span class="attr">"span_near"</span> : &#123;</div><div class="line">        <span class="attr">"clauses"</span> : [</div><div class="line">          &#123; <span class="attr">"span_term"</span> : &#123; <span class="attr">"field1"</span> : <span class="string">"la"</span> &#125; &#125;,</div><div class="line">          &#123; <span class="attr">"span_term"</span> : &#123; <span class="attr">"field1"</span> : <span class="string">"hoya"</span> &#125; &#125;</div><div class="line">        ],</div><div class="line">        <span class="attr">"slop"</span> : <span class="number">0</span>,</div><div class="line">        <span class="attr">"in_order"</span> : <span class="literal">true</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="Span-Containing-Query"><a href="#Span-Containing-Query" class="headerlink" title="Span Containing Query"></a><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-span-containing-query.html" target="_blank" rel="external">Span Containing Query</a></h5><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"span_containing"</span> : &#123;</div><div class="line">    <span class="attr">"little"</span> : &#123;</div><div class="line">      <span class="attr">"span_term"</span> : &#123; <span class="attr">"field1"</span> : <span class="string">"foo"</span> &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"big"</span> : &#123;</div><div class="line">      <span class="attr">"span_near"</span> : &#123;</div><div class="line">        <span class="attr">"clauses"</span> : [</div><div class="line">          &#123; <span class="attr">"span_term"</span> : &#123; <span class="attr">"field1"</span> : <span class="string">"bar"</span> &#125; &#125;,</div><div class="line">          &#123; <span class="attr">"span_term"</span> : &#123; <span class="attr">"field1"</span> : <span class="string">"baz"</span> &#125; &#125;</div><div class="line">        ],</div><div class="line">        <span class="attr">"slop"</span> : <span class="number">5</span>,</div><div class="line">        <span class="attr">"in_order"</span> : <span class="literal">true</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<p>mapping</p>
+<p>Mapping Options:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tree</td>
+<td>geohash / quadtree</td>
+<td>geohash</td>
+</tr>
+<tr>
+<td>precision</td>
+<td>in, inch, yd, yard, mi, miles, km, kilometers, m,meters, cm,centimeters, mm, millimeters</td>
+<td>meters</td>
+</tr>
+<tr>
+<td>tree_levels</td>
+<td></td>
+<td>50m</td>
+</tr>
+<tr>
+<td>strategy</td>
+<td>The approach for how to represent shapes at indexing and search time</td>
+<td>recursive</td>
+</tr>
+<tr>
+<td>distance_error_pct</td>
+<td>precise</td>
+<td>0.025 ((2.5%)</td>
+</tr>
+<tr>
+<td>orientation</td>
+<td>Optionally define how to interpret vertex order for polygons / multipolygons</td>
+<td>ccw</td>
+</tr>
+<tr>
+<td>points_only</td>
+<td></td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<p><a href="http://www.geojson.org/" target="_blank" rel="external">GeoJSON</a></p>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/05/16/elasticsearch/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

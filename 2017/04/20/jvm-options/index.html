@@ -1,0 +1,418 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="OptionsSizing
+
+
+Option
+Description
+Example
+
+
+
+
+-Xms
+min heap size
+-Xms8G
+
+
+-Xmx
+max heap size
+-Xmx8G
+
+
+-Xmn
+min and max young size
+-Xmn2G
+
+
+-Xss
+threa">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JVM Options | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/04/20/jvm-options/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>JVM Options</h1>
+        
+        <div class="time-info">
+<time datetime="2017-04-20T06:00:28.000Z" itemprop="datePublished">Apr 20, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Options"><span class="toc-number">1.</span> <span class="toc-text">Options</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Sizing"><span class="toc-number">1.1.</span> <span class="toc-text">Sizing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Performance-Options"><span class="toc-number">1.2.</span> <span class="toc-text">Performance Options</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Misc"><span class="toc-number">1.3.</span> <span class="toc-text">Misc</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Print-All-Options"><span class="toc-number">1.3.1.</span> <span class="toc-text">Print All Options</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Enable-GC-Logs"><span class="toc-number">1.3.2.</span> <span class="toc-text">Enable GC Logs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Alter-DNS-Cache"><span class="toc-number">1.3.3.</span> <span class="toc-text">Alter DNS Cache</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Do-Not-Wait-Antropy-For-SecurityRandom"><span class="toc-number">1.3.4.</span> <span class="toc-text">Do Not Wait Antropy For SecurityRandom</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Dump-on-OOM"><span class="toc-number">1.3.5.</span> <span class="toc-text">Dump on OOM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Script-on-OOM"><span class="toc-number">1.3.6.</span> <span class="toc-text">Script on OOM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Enable-JMX"><span class="toc-number">1.3.7.</span> <span class="toc-text">Enable JMX</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Carbage-Collector"><span class="toc-number">2.</span> <span class="toc-text">Carbage Collector</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Young-Generation-Collector"><span class="toc-number">2.1.</span> <span class="toc-text">Young Generation Collector</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Copy"><span class="toc-number">2.1.1.</span> <span class="toc-text">Copy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PS-Scavenge"><span class="toc-number">2.1.2.</span> <span class="toc-text">PS Scavenge</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ParNew"><span class="toc-number">2.1.3.</span> <span class="toc-text">ParNew</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#G1"><span class="toc-number">2.1.4.</span> <span class="toc-text">G1</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Old-Generation-Collector"><span class="toc-number">2.2.</span> <span class="toc-text">Old Generation Collector</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MarkSweepCompact"><span class="toc-number">2.2.1.</span> <span class="toc-text">MarkSweepCompact</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PS-MarkSweep"><span class="toc-number">2.2.2.</span> <span class="toc-text">PS MarkSweep</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ConcurrentMarkSweep"><span class="toc-number">2.2.3.</span> <span class="toc-text">ConcurrentMarkSweep</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#G1-Mixed"><span class="toc-number">2.2.4.</span> <span class="toc-text">G1 Mixed</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Combinations"><span class="toc-number">2.3.</span> <span class="toc-text">Combinations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Example"><span class="toc-number">2.4.</span> <span class="toc-text">Example</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Parallel-Collector"><span class="toc-number">2.4.1.</span> <span class="toc-text">Parallel Collector</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CMS-Collector"><span class="toc-number">2.4.2.</span> <span class="toc-text">CMS Collector</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Phases"><span class="toc-number">2.4.3.</span> <span class="toc-text">Phases</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#G1-Collector"><span class="toc-number">2.4.4.</span> <span class="toc-text">G1 Collector</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tools"><span class="toc-number">3.</span> <span class="toc-text">Tools</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jmap"><span class="toc-number">3.1.</span> <span class="toc-text">jmap</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Dump-The-Heap"><span class="toc-number">3.1.1.</span> <span class="toc-text">Dump The Heap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Dump-The-Heap-Live-Only"><span class="toc-number">3.1.2.</span> <span class="toc-text">Dump The Heap, Live Only</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Print-Distribution"><span class="toc-number">3.1.3.</span> <span class="toc-text">Print Distribution</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jstat"><span class="toc-number">3.2.</span> <span class="toc-text">jstat</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Loaded-Unloaded-Classes-Info"><span class="toc-number">3.2.1.</span> <span class="toc-text">Loaded/Unloaded Classes Info</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Compiler-Info"><span class="toc-number">3.2.2.</span> <span class="toc-text">Compiler Info</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Capacities-KB-and-GC-Info"><span class="toc-number">3.2.3.</span> <span class="toc-text">Capacities (KB) and GC Info</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Capacities-Ratio-and-GC-Info"><span class="toc-number">3.2.4.</span> <span class="toc-text">Capacities (Ratio) and GC Info</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Capacities-KB-Info"><span class="toc-number">3.2.5.</span> <span class="toc-text">Capacities (KB) Info</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jstack"><span class="toc-number">3.3.</span> <span class="toc-text">jstack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jinfo"><span class="toc-number">3.4.</span> <span class="toc-text">jinfo</span></a></li></ol></li></ol>
+            </div>
+            
+            <p><img src="https://raw.githubusercontent.com/orctom/images/master/java/memory.jpg" alt="Overview"></p>
+<h2 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h2><h3 id="Sizing"><a href="#Sizing" class="headerlink" title="Sizing"></a>Sizing</h3><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-Xms</code></td>
+<td>min heap size</td>
+<td>-Xms8G</td>
+</tr>
+<tr>
+<td><code>-Xmx</code></td>
+<td>max heap size</td>
+<td>-Xmx8G</td>
+</tr>
+<tr>
+<td><code>-Xmn</code></td>
+<td>min and max young size</td>
+<td>-Xmn2G</td>
+</tr>
+<tr>
+<td><code>-Xss</code></td>
+<td>thread stack size, equivalent to <code>-XX:ThreadStackSize</code></td>
+<td>-Xss1M</td>
+</tr>
+<tr>
+<td><code>–XX:NewRatio</code></td>
+<td>young size = <code>heap/(NewRatio + 1)</code>, or <code>NewRatio = old / young</code></td>
+<td>default: –XX:NewRatio=2</td>
+</tr>
+<tr>
+<td><code>-XX:NewSize</code></td>
+<td>min young size</td>
+<td>-XX:NewSize=3G</td>
+</tr>
+<tr>
+<td><code>-XX:MaxNewSize</code></td>
+<td>max young size</td>
+<td>-XX:MaxNewSize=3G</td>
+</tr>
+<tr>
+<td><code>-XX:SurvivorRatio</code></td>
+<td>each survivor size = <code>young/(SurvivorRatio + 2)</code>, or <code>SurvivorRatio = eden / each survivor</code></td>
+<td>Default: -XX:SurvivorRatio=8</td>
+</tr>
+<tr>
+<td><code>-XX:PermSize</code></td>
+<td>min PermGen size, Java &lt; 8</td>
+<td>-XX:PermSize=512M</td>
+</tr>
+<tr>
+<td><code>-XX:MaxPermSize</code></td>
+<td>max PermGen size, Java &lt; 8</td>
+<td>-XX:PermSize=512M</td>
+</tr>
+<tr>
+<td><code>-XX:MaxMetaspaceSize</code></td>
+<td>max metaspace size, Java &gt;= 8</td>
+<td>-XX:MaxMetaspaceSize=1G</td>
+</tr>
+<tr>
+<td><code>-XX:ThreadStackSize</code></td>
+<td>thread stack size,  equivalent to <code>-Xss</code></td>
+<td>-XX:ThreadStackSize=1M</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notice</strong></p>
+<ul>
+<li>Set <code>-Xms</code> and <code>-Xmx</code> the same value to avoid heap resizing in production</li>
+</ul>
+<h3 id="Performance-Options"><a href="#Performance-Options" class="headerlink" title="Performance Options"></a>Performance Options</h3><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-XX:+UseLargePages</td>
+<td>enable use large pages</td>
+</tr>
+<tr>
+<td>-XX:LargePageSizeInBytes</td>
+<td>large page size</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h3><h4 id="Print-All-Options"><a href="#Print-All-Options" class="headerlink" title="Print All Options"></a>Print All Options</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">java</span> <span class="selector-tag">-server</span> <span class="selector-tag">-XX</span><span class="selector-pseudo">:+AggressiveOpts</span> <span class="selector-tag">-XX</span><span class="selector-pseudo">:+UnlockDiagnosticVMOptions</span> <span class="selector-tag">-XX</span><span class="selector-pseudo">:+UnlockExperimentalVMOptions</span> <span class="selector-tag">-XX</span><span class="selector-pseudo">:+PrintFlagsFinal</span> <span class="selector-tag">-version</span></div></pre></td></tr></table></figure>
+<h4 id="Enable-GC-Logs"><a href="#Enable-GC-Logs" class="headerlink" title="Enable GC Logs"></a>Enable GC Logs</h4><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">-<span class="ruby"><span class="symbol">verbose:</span>gc </span></div><div class="line">-<span class="ruby"><span class="symbol">XX:</span>+PrintGCApplicationStoppedTime </span></div><div class="line">-<span class="ruby"><span class="symbol">XX:</span>+PrintGCDateStamps </span></div><div class="line">-<span class="ruby"><span class="symbol">XX:</span>+PrintGCDetails </span></div><div class="line">-<span class="ruby"><span class="symbol">XX:</span>+PrintGCTimeStamps </span></div><div class="line">-<span class="ruby"><span class="symbol">XX:</span>+PrintHeapAtGC </span></div><div class="line">-<span class="ruby"><span class="symbol">XX:</span>+PrintTenuringDistribution </span></div><div class="line">-<span class="ruby"><span class="symbol">Xloggc:</span>../logs/gc-<span class="string">`date +%F_%H-%M-%S`</span>.log </span></div><div class="line">-<span class="ruby"><span class="symbol">XX:</span>+UseGCLogFileRotation </span></div><div class="line">-<span class="ruby"><span class="symbol">XX:</span>NumberOfGCLogFiles=<span class="number">20</span> </span></div><div class="line">-<span class="ruby"><span class="symbol">XX:</span>GCLogFileSize=<span class="number">200</span>M</span></div></pre></td></tr></table></figure>
+<h4 id="Alter-DNS-Cache"><a href="#Alter-DNS-Cache" class="headerlink" title="Alter DNS Cache"></a>Alter DNS Cache</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-Dsun<span class="selector-class">.net</span><span class="selector-class">.inetaddr</span><span class="selector-class">.ttl</span>=&lt;TTL <span class="keyword">in</span> seconds&gt;</div></pre></td></tr></table></figure>
+<h4 id="Do-Not-Wait-Antropy-For-SecurityRandom"><a href="#Do-Not-Wait-Antropy-For-SecurityRandom" class="headerlink" title="Do Not Wait Antropy For SecurityRandom"></a>Do Not Wait Antropy For SecurityRandom</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-Djava<span class="selector-class">.security</span><span class="selector-class">.egd</span>=file:/dev/./urandom</div></pre></td></tr></table></figure>
+<h4 id="Dump-on-OOM"><a href="#Dump-on-OOM" class="headerlink" title="Dump on OOM"></a>Dump on OOM</h4><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">-XX:</span>+HeapDumpOnOutOfMemoryError </div><div class="line"><span class="symbol">-XX:</span>HeapDumpPath=../logs/dump-`date +<span class="variable">%F_%</span>H-<span class="variable">%M-%</span>S`.hprof</div></pre></td></tr></table></figure>
+<h4 id="Script-on-OOM"><a href="#Script-on-OOM" class="headerlink" title="Script on OOM"></a>Script on OOM</h4><figure class="highlight 1c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-XX:OnOutOfMemoryError=<span class="string">"/path/to/script.sh</span></div></pre></td></tr></table></figure>
+<h4 id="Enable-JMX"><a href="#Enable-JMX" class="headerlink" title="Enable JMX"></a>Enable JMX</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-Djava<span class="selector-class">.rmi</span><span class="selector-class">.server</span><span class="selector-class">.hostname</span>=&lt;external IP&gt;</div><div class="line">-Dcom<span class="selector-class">.sun</span><span class="selector-class">.management</span><span class="selector-class">.jmxremote</span><span class="selector-class">.port</span>=&lt;port&gt; </div><div class="line">-Dcom<span class="selector-class">.sun</span><span class="selector-class">.management</span><span class="selector-class">.jmxremote</span><span class="selector-class">.authenticate</span>=false </div><div class="line">-Dcom<span class="selector-class">.sun</span><span class="selector-class">.management</span><span class="selector-class">.jmxremote</span><span class="selector-class">.ssl</span>=false</div></pre></td></tr></table></figure>
+<h2 id="Carbage-Collector"><a href="#Carbage-Collector" class="headerlink" title="Carbage Collector"></a>Carbage Collector</h2><h3 id="Young-Generation-Collector"><a href="#Young-Generation-Collector" class="headerlink" title="Young Generation Collector"></a>Young Generation Collector</h3><h4 id="Copy"><a href="#Copy" class="headerlink" title="Copy"></a>Copy</h4><p>Uses one thread to copy surviving objects from Eden to Survivor spaces and between Survivor spaces.<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">-XX</span><span class="selector-pseudo">:+UseSerialGC</span></div></pre></td></tr></table></figure></p>
+<h4 id="PS-Scavenge"><a href="#PS-Scavenge" class="headerlink" title="PS Scavenge"></a>PS Scavenge</h4><p>Like the Copy collector, but uses multiple threads. (With PS Old Collector)<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">-XX</span><span class="selector-pseudo">:+UseParallelGC</span></div></pre></td></tr></table></figure></p>
+<h4 id="ParNew"><a href="#ParNew" class="headerlink" title="ParNew"></a>ParNew</h4><p>Like the Copy collector, but uses multiple threads. (With Concurrent Old Collector)<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">-XX</span><span class="selector-pseudo">:+UseParNewGC</span></div></pre></td></tr></table></figure></p>
+<h4 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h4><p>Old is also <code>G1</code>.<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">-XX</span><span class="selector-pseudo">:+UseG1GC</span></div></pre></td></tr></table></figure></p>
+<h3 id="Old-Generation-Collector"><a href="#Old-Generation-Collector" class="headerlink" title="Old Generation Collector"></a>Old Generation Collector</h3><h4 id="MarkSweepCompact"><a href="#MarkSweepCompact" class="headerlink" title="MarkSweepCompact"></a>MarkSweepCompact</h4><p>The serial mark-sweep collector, uses one thread full mark-sweep garbage collection algorithm, with optional compaction.<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">-XX</span><span class="selector-pseudo">:+UseSerialGC</span></div></pre></td></tr></table></figure></p>
+<h4 id="PS-MarkSweep"><a href="#PS-MarkSweep" class="headerlink" title="PS MarkSweep"></a>PS MarkSweep</h4><p>The parallel scavenge mark-sweep collector, multiple threads version of <code>MarkSweepCompact</code>.<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">-XX</span><span class="selector-pseudo">:+UseParallelOldGC</span></div></pre></td></tr></table></figure></p>
+<h4 id="ConcurrentMarkSweep"><a href="#ConcurrentMarkSweep" class="headerlink" title="ConcurrentMarkSweep"></a>ConcurrentMarkSweep</h4><p>The <code>CMS</code> collector.<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">-XX</span><span class="selector-pseudo">:+UseConcMarkSweepGC</span></div></pre></td></tr></table></figure></p>
+<h4 id="G1-Mixed"><a href="#G1-Mixed" class="headerlink" title="G1 Mixed"></a>G1 Mixed</h4><p>The <code>G1</code> collector.<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">-XX</span><span class="selector-pseudo">:+UseG1GC</span></div></pre></td></tr></table></figure></p>
+<h3 id="Combinations"><a href="#Combinations" class="headerlink" title="Combinations"></a>Combinations</h3><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Young</th>
+<th>Old</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-XX:+UseSerialGC</code></td>
+<td><code>Copy</code></td>
+<td><code>MarkSweepCompact</code></td>
+</tr>
+<tr>
+<td><code>-XX:+UseG1GC</code></td>
+<td><code>G1 Young</code></td>
+<td><code>G1 Mixed</code></td>
+</tr>
+<tr>
+<td><code>-XX:+UseParallelGC</code></td>
+<td><code>PS Scavenge</code></td>
+<td><code>PS MarkSweep</code></td>
+</tr>
+<tr>
+<td><code>-XX:+UseConcMarkSweepGC</code></td>
+<td><code>ParNew</code></td>
+<td><code>MarkSweepCompact</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><h4 id="Parallel-Collector"><a href="#Parallel-Collector" class="headerlink" title="Parallel Collector"></a>Parallel Collector</h4><p>For backend application, for its high throughput.<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-<span class="keyword">server</span> -Xms4G -Xmx4G</div></pre></td></tr></table></figure></p>
+<h4 id="CMS-Collector"><a href="#CMS-Collector" class="headerlink" title="CMS Collector"></a>CMS Collector</h4><p>For frontend application, for its low latency.<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">-server -Xms6G -Xmx6G -Xmn2G -<span class="string">XX:</span>SurvivorRatio=<span class="number">2</span> </div><div class="line">-<span class="string">XX:</span>+UseConcMarkSweepGC -<span class="string">XX:</span>+CMSParallelRemarkEnabled -<span class="string">XX:</span>+UseCMSInitiatingOccupancyOnly </div><div class="line">-<span class="string">XX:</span>+ScavengeBeforeFullGC -<span class="string">XX:</span>+CMSScavengeBeforeRemark -<span class="string">XX:</span>CMSInitiatingOccupancyFraction=<span class="number">65</span> </div><div class="line">-<span class="string">XX:</span>+ParallelRefProcEnabled -<span class="string">XX:</span>+AlwaysPreTouch</div></pre></td></tr></table></figure></p>
+<h4 id="Phases"><a href="#Phases" class="headerlink" title="Phases"></a>Phases</h4><ul>
+<li>Initial Mark: <strong>stop-the-world</strong>, identify direct reachable objects from GC roots</li>
+<li>Concurrent Mark: mark the objects reachable from initially marked</li>
+<li>Precleaning: mark new objects as live/dead in the OOP table</li>
+<li>Remark: <strong>stop-the-world</strong>, retrace from GC roots and remark objects as live/dead in the OOP table</li>
+<li>Concurent Sweep: mark dead objects as free space</li>
+<li>Reset: reset the state to get ready for next collection</li>
+</ul>
+<p>OOP = Ordinary Object Pointer</p>
+<h4 id="G1-Collector"><a href="#G1-Collector" class="headerlink" title="G1 Collector"></a>G1 Collector</h4><p>For applications that use big memorys (at least 8G), or you want to play it safe.<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-server -Xms12G -Xmx12G -<span class="string">XX:</span>+UseG1GC -<span class="string">XX:</span>MaxGCPauseMillis=<span class="number">100</span></div></pre></td></tr></table></figure></p>
+<h2 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h2><h3 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h3><h4 id="Dump-The-Heap"><a href="#Dump-The-Heap" class="headerlink" title="Dump The Heap"></a>Dump The Heap</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -dump:format=<span class="selector-tag">b</span>,file=dump<span class="selector-class">.hprof</span> &lt;pid&gt;</div></pre></td></tr></table></figure>
+<h4 id="Dump-The-Heap-Live-Only"><a href="#Dump-The-Heap-Live-Only" class="headerlink" title="Dump The Heap, Live Only"></a>Dump The Heap, Live Only</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -dump:live,format=<span class="selector-tag">b</span>,file=dump<span class="selector-class">.hprof</span> &lt;pid&gt;</div></pre></td></tr></table></figure>
+<h4 id="Print-Distribution"><a href="#Print-Distribution" class="headerlink" title="Print Distribution"></a>Print Distribution</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jmap -heap <span class="tag">&lt;<span class="name">pid</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h3><h4 id="Loaded-Unloaded-Classes-Info"><a href="#Loaded-Unloaded-Classes-Info" class="headerlink" title="Loaded/Unloaded Classes Info"></a>Loaded/Unloaded Classes Info</h4><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jstat –<span class="class"><span class="keyword">class</span> [-<span class="title">h15</span>] &lt;pid&gt; [<span class="title">interval</span>] [<span class="title">count</span>]</span></div></pre></td></tr></table></figure>
+<h4 id="Compiler-Info"><a href="#Compiler-Info" class="headerlink" title="Compiler Info"></a>Compiler Info</h4><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jstat -compiler <span class="string">[-h15]</span> &lt;pid&gt; <span class="string">[interval]</span> <span class="string">[count]</span></div></pre></td></tr></table></figure>
+<h4 id="Capacities-KB-and-GC-Info"><a href="#Capacities-KB-and-GC-Info" class="headerlink" title="Capacities (KB) and GC Info"></a>Capacities (KB) and GC Info</h4><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jstat -gc <span class="string">[-h15]</span> &lt;pid&gt; <span class="string">[interval]</span> <span class="string">[count]</span></div></pre></td></tr></table></figure>
+<h4 id="Capacities-Ratio-and-GC-Info"><a href="#Capacities-Ratio-and-GC-Info" class="headerlink" title="Capacities (Ratio) and GC Info"></a>Capacities (Ratio) and GC Info</h4><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jstat -gcutil <span class="string">[-h15]</span> &lt;pid&gt; <span class="string">[interval]</span> <span class="string">[count]</span></div></pre></td></tr></table></figure>
+<h4 id="Capacities-KB-Info"><a href="#Capacities-KB-Info" class="headerlink" title="Capacities (KB) Info"></a>Capacities (KB) Info</h4><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jstat -gccapacity <span class="string">[-h15]</span> &lt;pid&gt; <span class="string">[interval]</span> <span class="string">[count]</span></div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S0C</td>
+<td><code>Survivor0</code> space capacity (KB)</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td><code>Survivor1</code> space capacity (KB)</td>
+</tr>
+<tr>
+<td>S0U</td>
+<td><code>Survivor0</code> space utilization (KB)</td>
+</tr>
+<tr>
+<td>S1U</td>
+<td><code>Survivor1</code> space utilization (KB)</td>
+</tr>
+<tr>
+<td>EC</td>
+<td><code>Eden</code> space capacity (KB)</td>
+</tr>
+<tr>
+<td>EU</td>
+<td><code>Eden</code> space utilization (KB)</td>
+</tr>
+<tr>
+<td>OC</td>
+<td><code>Old</code> space capacity (KB)</td>
+</tr>
+<tr>
+<td>OU</td>
+<td><code>Old</code> space utilization (KB)</td>
+</tr>
+<tr>
+<td>PC</td>
+<td><code>Permanent</code> space capacity  (KB)</td>
+</tr>
+<tr>
+<td>PU</td>
+<td><code>Permanent</code> space utilization (KB)</td>
+</tr>
+<tr>
+<td>YGC</td>
+<td>number of <code>Yong GC</code> events</td>
+</tr>
+<tr>
+<td>YGCT</td>
+<td>used time for <code>Yong GC</code></td>
+</tr>
+<tr>
+<td>FGC</td>
+<td>number of <code>Full GC</code> events</td>
+</tr>
+<tr>
+<td>FGCT</td>
+<td>used time for <code>Full GC</code></td>
+</tr>
+<tr>
+<td>GCT</td>
+<td>total used time for <code>GC</code></td>
+</tr>
+<tr>
+<td>MC</td>
+<td>Metaspace capacity (KB)</td>
+</tr>
+<tr>
+<td>MU</td>
+<td>Metacspace utilization (KB)</td>
+</tr>
+<tr>
+<td>CCSC</td>
+<td>Compressed class space capacity (KB)</td>
+</tr>
+<tr>
+<td>CCSU</td>
+<td>Compressed class space used (KB)</td>
+</tr>
+<tr>
+<td>NGCMN</td>
+<td><code>Young</code> space min capacity (KB)</td>
+</tr>
+<tr>
+<td>NGCMX</td>
+<td><code>Young</code> space max capacity (KB)</td>
+</tr>
+<tr>
+<td>NGC</td>
+<td><code>Young</code> space current capacity (KB)</td>
+</tr>
+<tr>
+<td>OGCMN</td>
+<td><code>Old</code> space min capacity (KB)</td>
+</tr>
+<tr>
+<td>OGCMX</td>
+<td><code>Old</code> space max capacity (KB)</td>
+</tr>
+<tr>
+<td>OGC</td>
+<td><code>Old</code> space current capacity (KB)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>Print threads information<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jstack <span class="tag">&lt;<span class="name">pid</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h3><p>Check the option value of a running JVM<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jinfo -flag <span class="tag">&lt;<span class="name">option</span>&gt;</span> <span class="tag">&lt;<span class="name">pid</span>&gt;</span></div></pre></td></tr></table></figure></p>
+
+
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/04/20/jvm-options/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+

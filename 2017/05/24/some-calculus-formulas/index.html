@@ -1,0 +1,211 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    
+    <meta name="author" content="orctom">
+    
+    <meta name="description" content="DerivativePolynomial
+$ c’ = 0 $
+$ x’ = 1 $
+$ (cx)’ = c $
+$ |x|’ = \frac{x}{|x|}, x \ne 0 $
+$ (x^c)’ = cx^{c-1} $
+$ \left(\frac 1 x\right)’ = (x^{-1})’">
+    
+    
+
+    
+    
+    
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Some Calculus Formulas | orctom</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Javascript -->
+    <script src="/js/jquery-2.1.0.min.js"></script>
+    <script src="/js/jquery.backstretch.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/headroom.min.js"></script>
+    <script src="/js/jquery.headroom.min.js"></script> 
+    <script src="/js/common.js"></script>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="orctom">orctom</a>
+            </div>
+
+            <div role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
+                
+
+                <ul class="nav navbar-nav">
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <script>
+    $(function() {
+        // page-id...
+        var pageId = "2017/05/24/some-calculus-formulas/";
+        pageId = pageId.substr(0, pageId.indexOf("/"));
+        if(pageId === "") pageId = "index";
+        
+        $("#nav-" + pageId).addClass("active");
+    });
+    </script>
+
+    <article class="post container">
+    <div class="well post-body first-post last-post">
+        <h1>Some Calculus Formulas</h1>
+        
+        <div class="time-info">
+<time datetime="2017-05-24T14:13:14.000Z" itemprop="datePublished">May 24, 2017</time> (updated: <time datetime="2017-05-24T14:13:14.000Z" itemprop="dateModified">May 24, 2017</time>)
+        </div>
+        
+        <div class="post-body-inner">
+            <div id="toc" class="toc-article well">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Derivative"><span class="toc-number">1.</span> <span class="toc-text">Derivative</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Polynomial"><span class="toc-number">1.1.</span> <span class="toc-text">Polynomial</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Exponential-Logarithmic"><span class="toc-number">1.2.</span> <span class="toc-text">Exponential / Logarithmic</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Trigonometric"><span class="toc-number">1.3.</span> <span class="toc-text">Trigonometric</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hyperbolic"><span class="toc-number">1.4.</span> <span class="toc-text">Hyperbolic</span></a></li></ol></li></ol>
+            </div>
+            
+            <h2 id="Derivative"><a href="#Derivative" class="headerlink" title="Derivative"></a>Derivative</h2><h3 id="Polynomial"><a href="#Polynomial" class="headerlink" title="Polynomial"></a>Polynomial</h3><ol>
+<li>$ c’ = 0 $</li>
+<li>$ x’ = 1 $</li>
+<li>$ (cx)’ = c $</li>
+<li>$ |x|’ = \frac{x}{|x|}, x \ne 0 $</li>
+<li>$ (x^c)’ = cx^{c-1} $</li>
+<li>$ \left(\frac 1 x\right)’ = (x^{-1})’ = -x^{-2} = - \frac {1} {x^2} $</li>
+<li>$ \left(\frac 1 {x^c}\right)’ = (x^{-c})’ = -cx^{-c-1} = - \frac {1} {x^{c+1}} $</li>
+<li>$ \left(\sqrt{x}\right)’ = \left(\frac 1 {x^{1/2}}\right)’ = \frac{1}{2} x^{-1/2} = \frac{1}{2\sqrt{x}}, x \gt 0 $</li>
+</ol>
+<h3 id="Exponential-Logarithmic"><a href="#Exponential-Logarithmic" class="headerlink" title="Exponential / Logarithmic"></a>Exponential / Logarithmic</h3><ol>
+<li>$ (c^x)’ = c^x \ln{c}, c \gt 0 $</li>
+<li>$ (e^x)’ = e^x $</li>
+<li>$ (\log_cx)’ = \frac{1}{x\ln{c}}, c \gt0, c \ne 1 $</li>
+<li>$ (\ln{x})’ = \frac{1}{x}, x \gt 0 $</li>
+<li>$ (\ln{|x|})’ = \frac{1}{x} $</li>
+<li>$ (x^x)’ = x^x(1 + \ln{x}) $</li>
+</ol>
+<h3 id="Trigonometric"><a href="#Trigonometric" class="headerlink" title="Trigonometric"></a>Trigonometric</h3><ol>
+<li>$ (\sin{x})’ = \cos{x} $</li>
+<li>$ (\cos{x})’ = -\sin{x} $</li>
+<li>$ (\tan{x})’ = \sec^2{x} = \frac{1}{\cos^2x} $</li>
+<li>$ (\sec{x})’ = \sec{x} * \tan{x} $</li>
+<li>$ (\csc{x})’ = -\csc{x} * \cot{x} $</li>
+<li>$ (\cot{x})’ = -\csc^2{x} = \frac{-1}{\sin^2{x}} $</li>
+<li>$ (\arcsin{x})’ = \frac{1}{\sqrt{1 - x^2}} $</li>
+<li>$ (\arccos{x})’ = \frac{-1}{\sqrt{1 - x^2}} $</li>
+<li>$ (\arctan{x})’ = \frac{1}{1 + x^2} $</li>
+<li>$ (arcsec \hskip1pt x)’ = \frac{1}{|x|\sqrt{x^2 - 1}} $</li>
+<li>$ (arccsc \hskip1pt x)’ = \frac{-1}{|x|\sqrt{x^2 - 1}} $</li>
+<li>$ (arccot \hskip1pt x)’ = \frac{-1}{1 + x^2} $</li>
+</ol>
+<h3 id="Hyperbolic"><a href="#Hyperbolic" class="headerlink" title="Hyperbolic"></a>Hyperbolic</h3><ol>
+<li>$ (\sinh{x})’ = \cosh{x} = \frac{e^x + e^{-x}}{2} $</li>
+<li>$ (\cosh{x})’ = \sinh{x} = \frac{e^x - e^{-x}}{2} $</li>
+<li>$ (\tanh{x})’ = sech^2 \hskip1pt {x} $</li>
+<li>$ (sech \hskip1pt {x})’ = -\tanh{x} * sech \hskip1pt {x} $</li>
+<li>$ (csch \hskip1pt {x})’ = -\coth{x} * csch \hskip1pt {x} $</li>
+<li>$ (\coth{x})’ = - csch^2 \hskip1pt {x} $</li>
+<li>$ (arcsinh \hskip1pt {x})’ = \frac{1}{\sqrt{x^2 + 1}} $</li>
+<li>$ (arccosh \hskip1pt {x})’ = \frac{1}{\sqrt{x^2 - 1}}, x \gt 1 $</li>
+<li>$ (arctanh \hskip1pt {x})’ = \frac{1}{1 - |x|^2}, |x| \lt 1 $</li>
+<li>$ (arsech \hskip1pt {x})’ = \frac{-1}{x\sqrt{1 - x^2}} $</li>
+<li>$ (arcsch \hskip1pt {x})’ = \frac{-1}{x\sqrt{1 + x^2}} $</li>
+<li>$ (arcoth \hskip1pt {x})’ = \frac{1}{1 - |x|^2}, |x| \gt 1 $</li>
+</ol>
+
+
+			
+			<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            preferredFont: "TeX",
+            availableFonts: ["STIX", "TeX"],
+            linebreaks: {
+                automatic: true
+            },
+            EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50),
+            scale: 120
+        },
+        tex2jax: {
+            inlineMath: [
+                ["$", "$"],
+                ["\\(", "\\)"]
+            ],
+            processEscapes: true,
+            ignoreClass: "tex2jax_ignore|dno",
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        },
+        TeX: {
+            Macros: {
+                href: "{}"
+            }
+        },
+        messageStyle: "none"
+    }); 
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+			
+            <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = undefined;
+this.page.identifier = http://www.orctom.com/2017/05/24/some-calculus-formulas/;
+};
+
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://orctom.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+        </div>
+    </div>
+</article>
+
+    <footer id="footer">
+    	
+        <small>&copy; 2017 orctom</small>
+    </footer>
+
+</body>
+</html>
+
